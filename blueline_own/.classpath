@@ -2,69 +2,69 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/activation.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/annotations.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/bcmail-jdk15.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/bcprov-jdk15.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/collections-generic.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/commons-codec.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/commons-httpclient.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/commons-imaging.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/commons-lang.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/commons-logging.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/cwf.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/dom.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/itaxmlserver-stub.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/itext.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jai_codec.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jai_core.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jax-qname.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jaxrpc-api.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jaxrpc-impl.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/jdom.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/log4j.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/mail.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/pdflib.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/poi-scratchpad.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/poi.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/saaj-api.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/saaj-impl.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/sednaclient-api-nodep.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/libs/xsdlib.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/blconfig.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/blmetadata.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/blueline-localization.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/blueline-tools.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/blueline.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/bluelineimpl.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/bluelineutil.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/bpmline-api.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/bpmline-impl.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/foldermanager.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/pdfint3.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/pdfint5.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/pdfint6.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/pdfint7.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/relationshipmanager.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Desktop/CWM/blueline/interfaces/sednaclient-blueline.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-german-corenlp-2016-10-31-models.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/ejml-0.23.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/javax.json-api-1.0-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/javax.json.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/joda-time-2.9-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/joda-time.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/jollyday-0.4.9-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/jollyday.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/protobuf.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/slf4j-api.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/slf4j-simple.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-javadoc.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-models.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/xom-1.2.10-src.jar"/>
-	<classpathentry kind="lib" path="/Users/jonasmueller/Downloads/stanford-corenlp-full-2016-10-31/xom.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/ejml-0.23.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/javax.json.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/javax.json-api-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/joda-time.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/joda-time-2.9-sources.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/jollyday.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/jollyday-0.4.9-sources.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/protobuf.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-models.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0-sources.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/xom.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/corenlp/stanford-corenlp-full-2016-10-31/stanford-corenlp-full-2016-10-31/xom-1.2.10-src.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/Content- und Wissensmanagement workspace/NLP/stanford-german-corenlp-2016-10-31-models.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/activation.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/annotations.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/bcmail-jdk15.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/bcprov-jdk15.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/collections-generic.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/commons-codec.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/commons-httpclient.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/commons-imaging.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/commons-lang.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/commons-logging.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/cwf.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/dom.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/itaxmlserver-stub.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/itext.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jai_codec.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jai_core.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jax-qname.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jaxrpc-api.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jaxrpc-impl.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/jdom.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/log4j.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/mail.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/pdflib.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/poi.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/poi-scratchpad.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/saaj-api.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/saaj-impl.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/sednaclient-api-nodep.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/libs/xsdlib.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/blconfig.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/blmetadata.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/blueline.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/bluelineimpl.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/blueline-localization.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/blueline-tools.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/bluelineutil.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/bpmline-api.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/bpmline-impl.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/foldermanager.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/pdfint3.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/pdfint5.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/pdfint6.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/pdfint7.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/relationshipmanager.jar"/>
+	<classpathentry kind="lib" path="//fileserver.intern.mi.hs-rm.de/cspie001/Semester 5/Content- und Wissensmanagement/DMS/DOXiS4-JavaAPI/interfaces/sednaclient-blueline.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

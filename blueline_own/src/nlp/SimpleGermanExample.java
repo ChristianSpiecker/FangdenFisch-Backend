@@ -11,9 +11,13 @@ import edu.stanford.nlp.util.StringUtils;
 import java.util.*;
 
 public class SimpleGermanExample {
-
-    public static void main(String[] args) {
-        String sampleGermanText = "...";
+	
+	public SimpleGermanExample(){
+		
+		
+	}
+    public String analyseText(String sampleGermanText) {
+    	String result = null;
         Annotation germanAnnotation = new Annotation(sampleGermanText);
         Properties germanProperties = StringUtils.argsToProperties(
                 new String[]{"-props", "StanfordCoreNLP-german.properties"});
@@ -21,7 +25,9 @@ public class SimpleGermanExample {
         pipeline.annotate(germanAnnotation);
         for (CoreMap sentence : germanAnnotation.get(CoreAnnotations.SentencesAnnotation.class)) {
             Tree sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-            System.out.println(sentenceTree);
+            result = sentenceTree.toString();
+            
         }
+        return result;
     }
 }
