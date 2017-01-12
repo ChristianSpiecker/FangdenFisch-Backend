@@ -12,7 +12,7 @@ public class Start {
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
 		
-		System.out.println("asdsa");
+		System.out.println("asdsaaa");
 		try {
 			Controller controller = new Controller();
 		} catch (IOException e) {
