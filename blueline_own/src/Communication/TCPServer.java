@@ -3,14 +3,20 @@ package Communication;
 import java.io.*;
 import java.net.*;
 
+import com.ser.blueline.BlueLineException;
+
+import blueline_own.Controller;
+import nlp.SimpleGermanExample;
+
 class TCPServer {
 
 	public static void main(String argv[]) throws Exception {
 		String clientSentence;
 		String capitalizedSentence;
-		System.out.println("Server l�uftt");
 		ServerSocket welcomeSocket = new ServerSocket(6789);
-
+		SimpleGermanExample sigeex = new SimpleGermanExample();
+		System.out.println("Server l�uftt");
+		
 		while (true) {
 
 			Socket connectionSocket = welcomeSocket.accept();
@@ -21,17 +27,40 @@ class TCPServer {
 			DataOutputStream outToClient = new DataOutputStream(
 					connectionSocket.getOutputStream());
 
-			clientSentence = inFromClient.readLine();
+			clientSentence = inFromClient.readLine().replace('+', ' ');
+			
 			if(clientSentence != null){
 				System.out.println(clientSentence);
-				
-				
-				capitalizedSentence = clientSentence.toUpperCase() + '\n';
-				outToClient.writeBytes("Server: "+capitalizedSentence);
+				String answer = testeNLP(sigeex, clientSentence);
+				outToClient.writeBytes("Server: "+ answer + "\n");
+				System.out.println("Gesendet: "+answer + "\n");
 			}
 			
 
 			
 		}
 	}
+	
+
+	
+	public void bluelinestuff(){
+		try {
+			Controller controller = new Controller();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+		} catch (BlueLineException e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static String testeNLP(SimpleGermanExample sigeex, String text){
+		return sigeex.analyseText(text);
+	}	
+
+
+
+
 }
