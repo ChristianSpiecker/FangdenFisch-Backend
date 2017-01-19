@@ -8,7 +8,7 @@ class TCPServer {
 	public static void main(String argv[]) throws Exception {
 		String clientSentence;
 		String capitalizedSentence;
-		System.out.println("Server läuft");
+		System.out.println("Server lï¿½uftt");
 		ServerSocket welcomeSocket = new ServerSocket(6789);
 
 		while (true) {
