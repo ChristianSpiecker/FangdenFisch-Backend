@@ -13,9 +13,9 @@ class TCPServer {
 	public static void main(String argv[]) throws Exception {
 		String clientSentence;
 		String capitalizedSentence;
-		ServerSocket welcomeSocket = new ServerSocket(6789);
-		SimpleGermanExample sigeex = new SimpleGermanExample();
-		System.out.println("Server l�uftt");
+		ServerSocket welcomeSocket = new ServerSocket(420);
+		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+		System.out.println("Server rennt");
 		
 		while (true) {
 
