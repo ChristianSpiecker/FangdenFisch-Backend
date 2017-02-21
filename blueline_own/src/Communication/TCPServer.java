@@ -17,7 +17,7 @@ class TCPServer {
 		ServerSocket welcomeSocket = new ServerSocket(420);
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
 		System.out.println("Server rennt");
-		
+		Controller.getInstance();
 		while (true) {
 
 			Socket connectionSocket = welcomeSocket.accept();
@@ -34,7 +34,9 @@ class TCPServer {
 				System.out.println(clientSentence);
 				
 				Result res = testeNLP(sigeex, clientSentence);
+				System.out.println("alles ok bis blueline");
 				
+				bluelinestuff(res);
 				
 				//outToClient.writeBytes("Server: "+ answer + "\n");
 				//System.out.println("Gesendet: "+answer + "\n");
@@ -47,9 +49,13 @@ class TCPServer {
 	
 
 	
-	public void bluelinestuff(){
+	public static void bluelinestuff(Result res){
 		try {
-			Controller controller = new Controller();
+			
+			Controller.getInstance().mysearch(res.getsearchclass(0), res.getSearchword(0));
+			
+			
+			
 		} catch (IOException e) {
 			System.out.println(e.toString());
 			e.printStackTrace();

@@ -8,6 +8,7 @@ import com.ser.blueline.IDescriptor;
 import com.ser.blueline.IDocument;
 import com.ser.blueline.IDocumentHitList;
 import com.ser.blueline.IDocumentServer;
+import com.ser.blueline.IFulltextEngine;
 import com.ser.blueline.IProperties;
 import com.ser.blueline.IQueryParameter;
 import com.ser.blueline.ISerClassFactory;
@@ -67,6 +68,62 @@ public class Suche {
 		IDocumentHitList hitList = server.query(param, session);
 		return hitList.getDocumentObjects();
 	}
+	private IQueryClass getQueryClass(String searchclass){
+		for(IQueryClass queryClass : queryClasses){
+			if (searchclass.equals(queryClass))return queryClass;
+		}
+		return null;
+	}
+	public IDocument[] mysearchDocument(String searchclass, String searchword) throws BlueLineException, NumberFormatException, IOException{
+		
+		// DOKUMENTENKLASSE
+		System.out.println("Dokumentenklasse auswaehlen!");
+		
+		// Hole die Richtige Suchklasse
+		IQueryClass queryClass = myChooseQueryClass(searchclass); 
+		
+		
+		
+		
+		// DIALOG UND DESKRIPTOR
+		// suche (Default-) Dialog aus der gewählten Suchklasse
+		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
+		// wähle daraus einen passenden Deskriptor aus
+
+		// alle deskriptoren 
+		ArrayList<IDescriptor>descriptors = getDescriptors(dialog);
+		// IValueDescriptorlist
+		ArrayList<IValueDescriptor> valuedescriptors = new ArrayList<IValueDescriptor>();
+		
+		// alle IValueDescriptor generieren
+		for(IDescriptor descr : descriptors){
+			valuedescriptors.add(factory.getValueDescriptorInstance(descr));
+		} 
+		
+		// Suchanfrage anfuegen
+		//System.out.println(descriptor.getName() + ": ");
+		//String anfrage = inputStreamString();
+		
+		// Jedem Valuedescriptor das suchwort adden
+		/*for(IValueDescriptor descr : valuedescriptors){
+			descr.addValue(searchword);
+		}*/ 
+		//cheeese
+		valuedescriptors.get(9).addValue(searchword);
+		
+		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
+		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
+		
+		// alle ValueDescriptors adden
+		/*for(IValueDescriptor descr : valuedescriptors){
+			param.addValueDescriptor(descr);
+		}*/ 
+		param.addValueDescriptor(valuedescriptors.get(9));
+
+		// Server anfragen und das Ergebnis speichern
+		IDocumentHitList hitList = server.query(param, session);
+		return hitList.getDocumentObjects();
+	}
 	
 	public int inputStreamInteger() throws NumberFormatException, IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -86,6 +143,14 @@ public class Suche {
 			i++;
 		}
 		return queryClasses[inputStreamInteger()]; 
+	}
+	public IQueryClass myChooseQueryClass(String searchclass) throws MetaDataException, NumberFormatException, IOException {
+		// auswahl der Klassen ausgeben
+		int i = SearchClassMapper.getSearchClassNumber(searchclass);
+		if (i == -1){
+			return null;
+		}		
+		return queryClasses[i]; 
 	}
 	
 	public IDescriptor chooseDescriptor(IQueryDlg dialog) throws BlueLineException, NumberFormatException, IOException{

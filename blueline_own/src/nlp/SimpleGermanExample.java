@@ -99,7 +99,7 @@ public class SimpleGermanExample {
             Tree sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
             result = sentenceTree.toString();
             
-            //pipeline.getConstituentTreePrinter().printTree(sentenceTree);
+            pipeline.getConstituentTreePrinter().printTree(sentenceTree);
             
             // http://stanfordnlp.github.io/CoreNLP/api.html
             for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
@@ -124,7 +124,7 @@ public class SimpleGermanExample {
             	res.setSearchword(key);
             }
             if (value.equals("NN")){
-            	res.setDescriptor(key);
+            	res.setsearchclass(key);
             }
         	
         }

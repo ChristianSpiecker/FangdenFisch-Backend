@@ -20,14 +20,25 @@ import com.ser.blueline.IDocumentServer;
 import com.ser.blueline.IRepresentation;
 import com.ser.blueline.ISerClassFactory;
 import com.ser.blueline.ISession;
+import com.ser.blueline.MetaDataException;
 import com.ser.blueline.metaDataComponents.IDialog;
 import com.ser.blueline.metaDataComponents.IQueryClass;
 import com.ser.blueline.metaDataComponents.IQueryDlg;
+
+import nlp.SimpleGermanExample;
 
 public class Controller {
 	Anmeldung meine_anmeldung;
 	ISession session;
 	
+	private static Controller instance;
+	public static Controller getInstance () throws IOException, BlueLineException {
+		    if (Controller.instance == null) {
+		    	Controller.instance = new Controller ();
+		    }
+		    return Controller.instance;
+	 }
+	 
 	public Controller() throws IOException, BlueLineException{
 		// initalisieren und einloggen
 		this.meine_anmeldung = new Anmeldung();
@@ -35,31 +46,61 @@ public class Controller {
 		meine_anmeldung.initDocumentServer("blueline_own.ini");
 		this.session = meine_anmeldung.login("Supervisor", "Supervisor", "km4");
 		
-		//Search Document
-		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
-		IDocument[] documents = suche.searchDocument();
-		
-		for(IDocument document : documents){
-			// alle Repraesentationen dieses Dokuments abrufen
-			IRepresentation[] representationList = document.getRepresentationList();
-			int representationNr = document.getDefaultRepresentation();
-			
-			// aus der Repraesentationsliste auslesen
-			IRepresentation defaultRepresentation = representationList[representationNr];
-			
-			// erstes Teildokument der Repraesentation herunterladen
-			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
-			
-			// was soll gelesen werden?
-			InputStream inputStream = documentPart.getRawDataAsStream();
-		
-			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
-	
-		}
+
+	}
+	public void logout() throws BlueLineException{
 		// Benutzer abmelden + Verbindung von Dokumentenserver trennen
 		meine_anmeldung.logout(session);
 		meine_anmeldung.close();
 	}
+	public void search() throws NumberFormatException, BlueLineException, IOException{
+		//Search Document
+		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
+		IDocument[] documents = suche.searchDocument();
+				
+		for(IDocument document : documents){
+			// alle Repraesentationen dieses Dokuments abrufen
+			IRepresentation[] representationList = document.getRepresentationList();
+			int representationNr = document.getDefaultRepresentation();
+					
+			// aus der Repraesentationsliste auslesen
+			IRepresentation defaultRepresentation = representationList[representationNr];
+					
+			// erstes Teildokument der Repraesentation herunterladen
+			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+					
+			// was soll gelesen werden?
+			InputStream inputStream = documentPart.getRawDataAsStream();
+				
+			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+		}
+	}
+	
+	public void mysearch(String searchclass, String searchword) throws NumberFormatException, BlueLineException, IOException{
+		//Search Document
+		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
+		
+		IDocument[] documents = suche.mysearchDocument(searchclass, searchword);
+				
+		for(IDocument document : documents){
+			// alle Repraesentationen dieses Dokuments abrufen
+			IRepresentation[] representationList = document.getRepresentationList();
+			int representationNr = document.getDefaultRepresentation();
+					
+			// aus der Repraesentationsliste auslesen
+			IRepresentation defaultRepresentation = representationList[representationNr];
+					
+			// erstes Teildokument der Repraesentation herunterladen
+			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+					
+			// was soll gelesen werden?
+			InputStream inputStream = documentPart.getRawDataAsStream();
+				
+			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+		}
+	}
+	
+	
 
 	private static void saveDocuments(InputStream inputStream, String docName) throws IOException{
 

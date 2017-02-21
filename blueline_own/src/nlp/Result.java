@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Result {
 	ArrayList<String> search = new ArrayList<>();
-	ArrayList<String> descriptor = new ArrayList<>();
+	ArrayList<String> searchclass = new ArrayList<>();
 	String tree = null;
 	
-	public Result(String search, String descriptor){
+	public Result(String search, String searchclass){
 		if (search != null){
 			this.search.add(search);
 		}
 		
-		if (descriptor != null){
-			this.descriptor.add(descriptor);
+		if (searchclass != null){
+			this.searchclass.add(searchclass);
 		}
 	}
 	public void addTree(String tree){
@@ -26,15 +26,15 @@ public class Result {
 	public String getSearchword(int index){
 		return search.get(index);
 	}
-	public String getDescriptor(int index){
-		return descriptor.get(index);
+	public String getsearchclass(int index){
+		return searchclass.get(index);
 	}
 	
 	public void setSearchword(String word){
 		search.add(word);
 	}
-	public void setDescriptor(String word){
-		descriptor.add(word);
+	public void setsearchclass(String word){
+		searchclass.add(word);
 	}
 	
 	
