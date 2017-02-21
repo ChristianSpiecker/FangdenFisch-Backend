@@ -6,6 +6,7 @@ import java.net.*;
 import com.ser.blueline.BlueLineException;
 
 import blueline_own.Controller;
+import nlp.Result;
 import nlp.SimpleGermanExample;
 
 class TCPServer {
@@ -31,9 +32,12 @@ class TCPServer {
 			
 			if(clientSentence != null){
 				System.out.println(clientSentence);
-				String answer = testeNLP(sigeex, clientSentence);
-				outToClient.writeBytes("Server: "+ answer + "\n");
-				System.out.println("Gesendet: "+answer + "\n");
+				
+				Result res = testeNLP(sigeex, clientSentence);
+				
+				
+				//outToClient.writeBytes("Server: "+ answer + "\n");
+				//System.out.println("Gesendet: "+answer + "\n");
 			}
 			
 
@@ -56,8 +60,8 @@ class TCPServer {
 	}
 	
 	
-	public static String testeNLP(SimpleGermanExample sigeex, String text){
-		return sigeex.analyseText(text);
+	public static Result testeNLP(SimpleGermanExample sigeex, String text){
+		return sigeex.myanalyseText(text);
 	}	
 
 

@@ -15,6 +15,7 @@ import edu.stanford.nlp.util.PropertiesUtils;
 import edu.stanford.nlp.util.StringUtils;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class SimpleGermanExample {
 	
@@ -80,5 +81,54 @@ public class SimpleGermanExample {
         }
         
         return result;
+    }
+    
+    
+    
+    
+    public Result myanalyseText(String sampleGermanText) {
+    	
+    	Map<String, String> keywords = new HashMap<String, String>();
+    	
+    	String result = null;
+        Annotation germanAnnotation = new Annotation(sampleGermanText);
+       
+        pipeline.annotate(germanAnnotation);
+        
+        for (CoreMap sentence : germanAnnotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+            Tree sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+            result = sentenceTree.toString();
+            
+            //pipeline.getConstituentTreePrinter().printTree(sentenceTree);
+            
+            // http://stanfordnlp.github.io/CoreNLP/api.html
+            for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
+                // this is the text of the token
+                String word = token.get(TextAnnotation.class);
+                // this is the POS tag of the token
+                String pos = token.get(PartOfSpeechAnnotation.class);
+                // this is the NER label of the token
+                String ne = token.get(NamedEntityTagAnnotation.class);
+                //System.out.println("w:"+word + " p:"+pos +" n:"+ ne);
+                if(pos.equals("NE") || pos.equals("NN")){
+ 
+                	keywords.put(word, pos);
+                }
+            }
+        }
+        Result res = new Result(null, null);
+        for (Entry<String, String> entry : keywords.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value.equals("NE")){
+            	res.setSearchword(key);
+            }
+            if (value.equals("NN")){
+            	res.setDescriptor(key);
+            }
+        	
+        }
+        res.addTree(result);
+        return res;
     }
 }
