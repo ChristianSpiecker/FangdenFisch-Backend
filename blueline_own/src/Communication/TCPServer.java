@@ -33,10 +33,11 @@ class TCPServer {
 			if(clientSentence != null){
 				System.out.println(clientSentence);
 				
-				Result res = testeNLP(sigeex, clientSentence);
-				System.out.println("alles ok bis blueline");
 				
-				bluelinestuff(res);
+				sigeex.myanalyseText(clientSentence);
+				
+				
+				//bluelinestuff(res);
 				
 				//outToClient.writeBytes("Server: "+ answer + "\n");
 				//System.out.println("Gesendet: "+answer + "\n");
@@ -65,10 +66,6 @@ class TCPServer {
 		}
 	}
 	
-	
-	public static Result testeNLP(SimpleGermanExample sigeex, String text){
-		return sigeex.myanalyseText(text);
-	}	
 
 
 

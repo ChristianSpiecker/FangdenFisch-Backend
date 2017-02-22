@@ -13,13 +13,30 @@ public class Start {
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
-		testeNLP("gib mir alle Rechnungen vom Meier und Müller");
+		//testeNLP("gib mir alle Rechnungen vom Meier und Müller");
+		//testeNLP("gib mir alle Rechnungen von der Rheinwerk Group");
+		testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 	}
 	
 	
 	public static void testeNLP(String sent){
 		SimpleGermanExample sigeex = new SimpleGermanExample();
-		Result res = sigeex.myanalyseText(sent);
+		sigeex.myanalyseText(sent);
+		System.out.println(Result.getInstance().evaluate());
+		switch(Result.getInstance().evaluate()){
+			case(0):{
+			// TODO Volltext
+			}
+			case(1):{
+			// TODO Strukturiert Suchklasse		
+			}
+			case(2):{
+				// TODO Strukturiert Suchklasse + Suchwort
+			}
+			case(3):{
+				//descriptorsearch(int searchclass, String searchword, int descriptor_Number)	
+			}
+		}
 		
 	}
 }

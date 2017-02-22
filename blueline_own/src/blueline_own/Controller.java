@@ -100,6 +100,29 @@ public class Controller {
 		}
 	}
 	
+	public void descriptorsearch(int searchclass, String searchword, int descriptor_Number) throws NumberFormatException, BlueLineException, IOException{
+		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
+		
+		IDocument[] documents = suche.descriptorsearchDocument(searchclass, searchword, descriptor_Number);
+				
+		for(IDocument document : documents){
+			// alle Repraesentationen dieses Dokuments abrufen
+			IRepresentation[] representationList = document.getRepresentationList();
+			int representationNr = document.getDefaultRepresentation();
+					
+			// aus der Repraesentationsliste auslesen
+			IRepresentation defaultRepresentation = representationList[representationNr];
+					
+			// erstes Teildokument der Repraesentation herunterladen
+			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+					
+			// was soll gelesen werden?
+			InputStream inputStream = documentPart.getRawDataAsStream();
+				
+			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+		}
+	}
+	
 	
 
 	private static void saveDocuments(InputStream inputStream, String docName) throws IOException{
