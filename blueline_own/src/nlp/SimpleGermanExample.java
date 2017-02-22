@@ -13,6 +13,7 @@ import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.PropertiesUtils;
 import edu.stanford.nlp.util.StringUtils;
+import edu.stanford.nlp.util.TypesafeMap;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -89,14 +90,14 @@ public class SimpleGermanExample {
     public Result myanalyseText(String sampleGermanText) {
     	
     	Map<String, String> keywords = new HashMap<String, String>();
-    	
+    	Tree sentenceTree = null;
     	String result = null;
         Annotation germanAnnotation = new Annotation(sampleGermanText);
        
         pipeline.annotate(germanAnnotation);
         
         for (CoreMap sentence : germanAnnotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-            Tree sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+            sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
             result = sentenceTree.toString();
             
             pipeline.getConstituentTreePrinter().printTree(sentenceTree);
@@ -111,12 +112,15 @@ public class SimpleGermanExample {
                 String ne = token.get(NamedEntityTagAnnotation.class);
                 //System.out.println("w:"+word + " p:"+pos +" n:"+ ne);
                 if(pos.equals("NE") || pos.equals("NN")){
- 
                 	keywords.put(word, pos);
                 }
+                
             }
         }
-        Result res = new Result(null, null);
+        
+        handleTree(sentenceTree);
+        
+        Result res = new Result();
         for (Entry<String, String> entry : keywords.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -130,5 +134,46 @@ public class SimpleGermanExample {
         }
         res.addTree(result);
         return res;
+    }
+    
+    private void handleTree(Tree tree){
+    	traverse(tree);
+    	
+    	
+    }
+    private void checkPP(){
+    	
+    	
+    }
+    private void checkNP(Tree np){
+    	System.out.println(np);
+    	Tree children [] = np.children();
+    	for(int i=0; i < children.length; i++){
+			if (children[i].nodeString().startsWith("NN")){
+				// NP NN Suchklasse
+				Result.getInstance().setsearchclass(children[i].firstChild().nodeString());
+			}else if (children[i].nodeString().startsWith("PP")){
+				
+				checkPP();
+				
+			}
+		}
+    	
+    	
+    	
+    }
+    
+    private void traverse(Tree tree){
+    	//System.out.println(tree.nodeString());
+    	
+    	if (tree.nodeString().startsWith("NP")){
+    		checkNP(tree);
+    	}
+    	Tree children [] = tree.children();
+    	if(children != null){
+    		for(int i=0; i < children.length; i++){
+    			traverse(children[i]);
+    		}
+    	}
     }
 }

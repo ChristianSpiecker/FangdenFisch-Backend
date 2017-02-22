@@ -13,7 +13,7 @@ public class Start {
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
-		testeNLP("Zeig mir die Rechnung vom Meier");
+		testeNLP("gib mir alle Rechnungen vom Meier und Müller");
 	}
 	
 	
