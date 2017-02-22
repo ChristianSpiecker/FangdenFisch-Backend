@@ -131,7 +131,7 @@ public class Suche {
 public IDocument[] descriptorsearchDocument(int searchclass, String searchword, int descriptor_Number) throws BlueLineException, NumberFormatException, IOException{
 		
 		IQueryClass queryClass = queryClasses[searchclass]; 
-		
+		System.out.println(queryClass.getDisplayString(session));
 
 		// DIALOG UND DESKRIPTOR
 		// suche (Default-) Dialog aus der gewählten Suchklasse
@@ -140,16 +140,17 @@ public IDocument[] descriptorsearchDocument(int searchclass, String searchword, 
 
 		// alle deskriptoren 
 		IDescriptor descriptor = getDescriptors(dialog).get(descriptor_Number);
-
+		System.out.println(descriptor.getDisplayString(session));
 
 		IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
 		
 		valueDescriptor.addValue(searchword);
 		
+		System.out.println(valueDescriptor.getDisplayString(session));
 		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
 		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
-		
-		
+		System.out.println("Klasse: "+searchclass + " | Suchwort: "+ searchword + " | descriptornummer: " + descriptor_Number);
+		System.out.println(param.toString());
 		param.addValueDescriptor(valueDescriptor);
 
 		// Server anfragen und das Ergebnis speichern

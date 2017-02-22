@@ -139,10 +139,14 @@ public class DescriptorMapper {
 			10: Kundenname
 		 */
 		put("Rechnung",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",10);
+			put("Kunden",10);
+			put("Hundenname",10);
 		}});
 		put("Rechnungen",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",10);
+			put("Kunden",10);
+			put("Hundenname",10);
 		}});
 		
 
