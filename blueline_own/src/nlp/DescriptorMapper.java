@@ -147,4 +147,16 @@ public class DescriptorMapper {
 		
 
 	}};
+	public static int getDescriptorNumber(String searchClass, String word){
+		if (descriptorMap.get(searchClass) == null){
+			return -1;
+			//TODO: switch case0
+		}
+		if (descriptorMap.get(searchClass).get(word) == null){
+			return -1;
+			//TODO: switch case2
+		}
+		
+		return descriptorMap.get(searchClass).get(word);
+	}
 }
