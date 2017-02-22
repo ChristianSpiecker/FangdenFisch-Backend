@@ -26,6 +26,8 @@ import com.ser.blueline.metaDataComponents.IQueryClass;
 import com.ser.blueline.metaDataComponents.IQueryDlg;
 import com.ser.sedna.client.bluelineimpl.SEDNABluelineAdapterFactory;
 
+import nlp.SearchClassMapper;
+
 public class Suche {
 	private IDocumentServer server;
 	private ISession session;

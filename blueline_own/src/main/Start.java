@@ -15,7 +15,7 @@ public class Start {
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
 		//testeNLP("gib mir alle Rechnungen vom Meier und Müller");
 		//testeNLP("gib mir alle Rechnungen von der Rheinwerk Group");
-		testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
+		testeNLP("gib mir alle Aufträge vom Kundenname Rheinwerk Group");
 	}
 	
 	
@@ -34,6 +34,7 @@ public class Start {
 				// TODO Strukturiert Suchklasse + Suchwort
 			}
 			case(3):{
+				//Result.getInstance().getSearchword()
 				//descriptorsearch(int searchclass, String searchword, int descriptor_Number)	
 			}
 		}
