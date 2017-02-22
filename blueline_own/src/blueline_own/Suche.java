@@ -125,6 +125,36 @@ public class Suche {
 		return hitList.getDocumentObjects();
 	}
 	
+	
+public IDocument[] descriptorsearchDocument(int searchclass, String searchword, int descriptor_Number) throws BlueLineException, NumberFormatException, IOException{
+		
+		IQueryClass queryClass = queryClasses[searchclass]; 
+		
+
+		// DIALOG UND DESKRIPTOR
+		// suche (Default-) Dialog aus der gewählten Suchklasse
+		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
+		// wähle daraus einen passenden Deskriptor aus
+
+		// alle deskriptoren 
+		IDescriptor descriptor = getDescriptors(dialog).get(descriptor_Number);
+
+
+		IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
+		
+		valueDescriptor.addValue(searchword);
+		
+		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
+		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
+		
+		
+		param.addValueDescriptor(valueDescriptor);
+
+		// Server anfragen und das Ergebnis speichern
+		IDocumentHitList hitList = server.query(param, session);
+		return hitList.getDocumentObjects();
+	}
+	
 	public int inputStreamInteger() throws NumberFormatException, IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		return Integer.parseInt(reader.readLine());

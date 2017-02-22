@@ -87,7 +87,7 @@ public class SimpleGermanExample {
     
     
     
-    public Result myanalyseText(String sampleGermanText) {
+    public void myanalyseText(String sampleGermanText) {
     	
     	Map<String, String> keywords = new HashMap<String, String>();
     	Tree sentenceTree = null;
@@ -120,7 +120,8 @@ public class SimpleGermanExample {
         
         handleTree(sentenceTree);
         
-        Result res = new Result();
+        Result.getInstance().addTree(result);
+        /*
         for (Entry<String, String> entry : keywords.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -133,28 +134,63 @@ public class SimpleGermanExample {
         	
         }
         res.addTree(result);
-        return res;
+        */
     }
     
     private void handleTree(Tree tree){
     	traverse(tree);
-    	
-    	
     }
-    private void checkPP(){
-    	
+    private void checkPP(Tree pp){
+    	Tree children [] = pp.children();
+    	for(int i=0; i < children.length; i++){
+			if (children[i].nodeString().startsWith("NN")){
+				// NP PP NN Deskriptor
+				String descriptor =children[i].firstChild().nodeString();
+				System.out.println("descriptor geaddet: " + descriptor);
+				Result.getInstance().setdescriptor(descriptor);
+			}else if (children[i].nodeString().startsWith("NE")){
+				// NP PP NE
+				String searchword = children[i].firstChild().nodeString();
+				System.out.println("Suchwort geaddet: " + searchword);
+				Result.getInstance().setSearchword(searchword);
+
+				
+			} else if (children[i].nodeString().startsWith("MPN")){
+				// NP PP NE
+				String erstesNE = children[i].getChild(0).toString().split(" ")[1];
+				String zweitesNE = children[i].getChild(1).toString().split(" ")[1];
+				String searchword = erstesNE.substring(0,erstesNE.length()-1).concat(" ").concat(zweitesNE.substring(0,zweitesNE.length()-1));
+				System.out.println("Suchwort geaddet: " + searchword);
+				Result.getInstance().setSearchword(searchword);
+
+				
+			} else if (children[i].nodeString().startsWith("CNP")){
+				// NP PP CNP
+				Tree cnp []= children[i].children();
+				for (int j=0; j < cnp.length; j++){
+					if(cnp[j].nodeString().startsWith("NE")){
+						System.out.println("Suchwort geaddet: " + cnp[j].firstChild().nodeString());
+						String searchword = cnp[j].firstChild().nodeString();
+						Result.getInstance().setSearchword(searchword);
+					}
+				}
+				
+				Result.getInstance().setSearchword(children[i].firstChild().nodeString());
+				
+			}
+		}
     	
     }
     private void checkNP(Tree np){
-    	System.out.println(np);
     	Tree children [] = np.children();
     	for(int i=0; i < children.length; i++){
 			if (children[i].nodeString().startsWith("NN")){
 				// NP NN Suchklasse
+				System.out.println("Suchklasse geaddet: " + children[i].firstChild().nodeString());
 				Result.getInstance().setsearchclass(children[i].firstChild().nodeString());
 			}else if (children[i].nodeString().startsWith("PP")){
 				
-				checkPP();
+				checkPP(children[i]);
 				
 			}
 		}

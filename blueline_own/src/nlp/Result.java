@@ -7,6 +7,20 @@ import com.ser.blueline.BlueLineException;
 
 import blueline_own.Controller;
 
+/*
+ * 4 Faelle
+ * 
+ * 0 Suchwort   ->   Volltext
+ * 
+ * 1 Suchklasse ->	Strukturiert  maybe volltext
+ * 
+ * 2 Suchklasse + Suchwort -> Strukturiert maybe volltext
+ * 
+ * 3 Suchklasse + Suchwort + Deskriptor -> Strukturiert
+ * 
+ */
+
+
 public class Result {
 	ArrayList<String> searchword = new ArrayList<>();
 	ArrayList<String> searchclass = new ArrayList<>();
@@ -23,6 +37,24 @@ public class Result {
 	
 	public Result(){
 
+	}
+	
+	public int evaluate(){
+		if(searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
+			// 0 Suchwort   ->   Volltext
+			return 0;
+		}else if(!searchclass.isEmpty() && descriptor.isEmpty() && searchword.isEmpty()){
+			// 1 Suchklasse ->	Strukturiert
+			return 1;
+		}else if(!searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
+			// 2 Suchklasse + Suchwort -> Strukturiert
+			return 2;
+		}else if(!searchclass.isEmpty() && !descriptor.isEmpty() && !searchword.isEmpty()){
+			//3 Suchklasse + Suchwort + Deskriptor -> Strukturiert
+			return 3;
+		}
+		
+		return -1;
 	}
 	
 	public void addTree(String tree){
