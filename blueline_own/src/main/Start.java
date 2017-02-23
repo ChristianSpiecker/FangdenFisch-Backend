@@ -14,7 +14,11 @@ public class Start {
 	public static void main(String[]args){
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
-		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+		
+		
+		//SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+		
+		
 		try {
 			Controller.getInstance();
 		} catch (IOException | BlueLineException e) {
@@ -23,7 +27,13 @@ public class Start {
 		}
 		//testeNLP("gib mir alle Rechnungen vom Meier und Müller");
 		//testeNLP("gib mir alle Rechnungen von der Rheinwerk Group");
-		testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
+		//testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
+		try {
+			Controller.getInstance().search();
+		} catch (NumberFormatException | BlueLineException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
