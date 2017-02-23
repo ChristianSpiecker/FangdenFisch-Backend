@@ -13,6 +13,8 @@ public class DescriptorMapper {
 		put("Auftrag",new HashMap<String,Integer>(){{
 			put("Kundenname",0);
 			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
 			put("Hundename",0);
 			put("Hundenamen",0);
 			put("Bestelldatum",1);
@@ -29,6 +31,8 @@ public class DescriptorMapper {
 		put("Aufträge",new HashMap<String,Integer>(){{
 			put("Kundenname",0);
 			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
 			put("Hundename",0);
 			put("Hundenamen",0);
 			put("Bestelldatum",1);
@@ -55,10 +59,15 @@ public class DescriptorMapper {
 			put("Kundenauftragsnummern",0);	
 			put("Kundenname",1);
 			put("Kundennamen",1);
+			put("Kunde",1);
+			put("Kunden",1);
 			put("Hundename",1);
 			put("Hundenamen",1);
 			put("Angebotsdatum",2);
 			put("Angebotsnummer",3);
+			put("Angebotnummer",3);
+			put("Angebotsnummern",3);
+			put("Angebotnummern",3);
 		}});
 		put("Auftragsbestätigungen",new HashMap<String,Integer>(){{
 			put("Auftragsnummer Kunde",0);
@@ -69,6 +78,8 @@ public class DescriptorMapper {
 			put("Kundenauftragsnummern",0);	
 			put("Kundenname",1);
 			put("Kundennamen",1);
+			put("Kunde",1);
+			put("Kunden",1);
 			put("Hundename",1);
 			put("Hundenamen",1);
 			put("Angebotsdatum",2);
@@ -101,30 +112,102 @@ public class DescriptorMapper {
 			5: Lieferscheinnummer
 		 */
 		put("Lieferschein",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",0);
+			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
+			put("Hundename",0);
+			put("Hundenamen",0);	
+			put("Lieferadresse",1);
+			put("Lieferadressen",1);
+			put("Auftragsnummer Kunde",2);
+			put("Auftragsnummer Kunden",2);	
+			put("Auftragsnummern Kunde",2);
+			put("Auftragsnummern Kunden",2);
+			put("Kundenauftragsnummer",2);
+			put("Kundenauftragsnummern",2);	
+			put("Artikelnummer",3);
+			put("Artikelnummern",3);
+			put("Lieferscheindatum",4);
+			put("Lieferscheinnummer",5);
+			put("Lieferscheinnummern",5);
 		}});
 		put("Lieferscheine",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",0);
+			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
+			put("Hundename",0);
+			put("Hundenamen",0);	
+			put("Lieferadresse",1);
+			put("Lieferadressen",1);
+			put("Auftragsnummer Kunde",2);
+			put("Auftragsnummer Kunden",2);	
+			put("Auftragsnummern Kunde",2);
+			put("Auftragsnummern Kunden",2);
+			put("Kundenauftragsnummer",2);
+			put("Kundenauftragsnummern",2);	
+			put("Artikelnummer",3);
+			put("Artikelnummern",3);
+			put("Lieferscheindatum",4);
+			put("Lieferscheinnummer",5);
+			put("Lieferscheinnummern",5);
 		}});
 		/*	0: Angebotsdatum
 			1: Angebotnummer
 			2: Kundenname 
 		 */
 		put("Angebot",new HashMap<String,Integer>(){{
-			
+			put("Angebotsdatum",0);
+			put("Angebotnummer",1);
+			put("Angebotsnummer",1);
+			put("Angebotnummern",1);
+			put("Angebotsnummern",1);
+			put("Kundenname",2);
+			put("Kundennamen",2);
+			put("Kunde",2);
+			put("Kunden",2);
+			put("Hundename",2);
+			put("Hundenamen",2);
 		}});
 		put("Angebote",new HashMap<String,Integer>(){{
-			
+			put("Angebotsdatum",0);
+			put("Angebotnummer",1);
+			put("Angebotsnummer",1);
+			put("Angebotnummern",1);
+			put("Angebotsnummern",1);
+			put("Kundenname",2);
+			put("Kundennamen",2);
+			put("Kunde",2);
+			put("Kunden",2);
+			put("Hundename",2);
+			put("Hundenamen",2);
 		}});
 		/*	0: Kundenname
 			1: Artikelname
 			2: Anfragedatum
 		 */
 		put("Anfrage",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",0);
+			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
+			put("Hundename",0);
+			put("Hundenamen",0);
+			put("Artikelnamen",1);
+			put("Artikelname",1);
+			put("Anfragedatum",2);
 		}});
 		put("Anfragen",new HashMap<String,Integer>(){{
-			
+			put("Kundenname",0);
+			put("Kundennamen",0);
+			put("Kunde",0);
+			put("Kunden",0);
+			put("Hundename",0);
+			put("Hundenamen",0);
+			put("Artikelnamen",1);
+			put("Artikelname",1);
+			put("Anfragedatum",2);			
 		}});
 		/*	0: Angebotnummer
 			1: Angebotsdatum
@@ -142,7 +225,6 @@ public class DescriptorMapper {
 			
 		}});
 		put("Rechnungen",new HashMap<String,Integer>(){{
-			
 		}});
 		
 
