@@ -106,6 +106,7 @@ public class Controller {
 		IDocument[] documents = suche.descriptorsearchDocument(searchclass, searchword, descriptor_Number);
 				
 		for(IDocument document : documents){
+			System.out.println("DOKUMENT ERHALTEN");
 			// alle Repraesentationen dieses Dokuments abrufen
 			IRepresentation[] representationList = document.getRepresentationList();
 			int representationNr = document.getDefaultRepresentation();

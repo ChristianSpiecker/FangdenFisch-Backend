@@ -4,7 +4,9 @@ import java.io.IOException;
 import com.ser.blueline.BlueLineException;
 
 import blueline_own.*;
+import nlp.DescriptorMapper;
 import nlp.Result;
+import nlp.SearchClassMapper;
 import nlp.SimpleGermanExample;
 
 public class Start {
@@ -13,9 +15,15 @@ public class Start {
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+		try {
+			Controller.getInstance();
+		} catch (IOException | BlueLineException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//testeNLP("gib mir alle Rechnungen vom Meier und Müller");
 		//testeNLP("gib mir alle Rechnungen von der Rheinwerk Group");
-		testeNLP("gib mir alle Aufträge vom Kundenname Rheinwerk Group");
+		testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 	}
 	
 	
@@ -34,8 +42,22 @@ public class Start {
 				// TODO Strukturiert Suchklasse + Suchwort
 			}
 			case(3):{
-				//Result.getInstance().getSearchword()
-				//descriptorsearch(int searchclass, String searchword, int descriptor_Number)	
+				
+				int searchClass = SearchClassMapper.getSearchClassNumber(Result.getInstance().getsearchclass(0));
+				int descriptor_Number = DescriptorMapper.getDescriptorNumber(Result.getInstance().getsearchclass(0), Result.getInstance().getdescriptor(0));
+				String searchword = Result.getInstance().getSearchword(0);
+				try {
+					Controller.getInstance().descriptorsearch(searchClass, searchword, descriptor_Number);
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BlueLineException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

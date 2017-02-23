@@ -222,9 +222,10 @@ public class DescriptorMapper {
 			10: Kundenname
 		 */
 		put("Rechnung",new HashMap<String,Integer>(){{
-			
+
 		}});
 		put("Rechnungen",new HashMap<String,Integer>(){{
+
 		}});
 		
 
