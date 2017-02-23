@@ -222,13 +222,87 @@ public class DescriptorMapper {
 			10: Kundenname
 		 */
 		put("Rechnung",new HashMap<String,Integer>(){{
-
+			put("Angebotnummer",0);
+			put("Angebotsnummer",0);
+			put("Angebotnummern",0);
+			put("Angebotsnummern",0);
+			put("Angebotsdatum",1);
+			put("Auftragsnummer",2);
+			put("Auftragsnummern",2);
+			put("Auftragnummer",2);
+			put("Auftragnummern",2);
+			put("Bestelldatum",3);			
+			put("Bruttopreis",4);
+			put("Bruttogesamtpreis",4);
+			put("Brutto",4);
+			put("Preis",4);
+			put("Gesamtpreis",4);
+			put("Nettopreis",4);
+			put("Nettogesamtpreis",4);
+			put("Netto",4);		
+			put("Kundennummer",6);
+			put("Kundennummern",6);
+			put("Kundenummer",6);
+			put("Kundenummern",6);
+			put("Hundennummer",6);
+			put("Hundennummern",6);
+			put("Hundenummer",6);
+			put("Hundenummern",6);
+			put("Rechnungsdatum",7);
+			put("Rechnungsnummer",8);
+			put("Rechnungsnummern",8);
+			put("Rechnungnummer",8);
+			put("Rechnungnummern",8);
+			put("Sachbearbeiter",9);
+			put("Sachbearbeiterin",9);
+			put("Kundenname",10);
+			put("Kundennamen",10);
+			put("Kunde",10);
+			put("Kunden",10);
+			put("Hundename",10);
+			put("Hundenamen",10);
 		}});
 		put("Rechnungen",new HashMap<String,Integer>(){{
-
+			put("Angebotnummer",0);
+			put("Angebotsnummer",0);
+			put("Angebotnummern",0);
+			put("Angebotsnummern",0);
+			put("Angebotsdatum",1);
+			put("Auftragsnummer",2);
+			put("Auftragsnummern",2);
+			put("Auftragnummer",2);
+			put("Auftragnummern",2);
+			put("Bestelldatum",3);			
+			put("Bruttopreis",4);
+			put("Bruttogesamtpreis",4);
+			put("Brutto",4);
+			put("Preis",4);
+			put("Gesamtpreis",4);
+			put("Nettopreis",4);
+			put("Nettogesamtpreis",4);
+			put("Netto",4);		
+			put("Kundennummer",6);
+			put("Kundennummern",6);
+			put("Kundenummer",6);
+			put("Kundenummern",6);
+			put("Hundennummer",6);
+			put("Hundennummern",6);
+			put("Hundenummer",6);
+			put("Hundenummern",6);
+			put("Rechnungsdatum",7);
+			put("Rechnungsnummer",8);
+			put("Rechnungsnummern",8);
+			put("Rechnungnummer",8);
+			put("Rechnungnummern",8);
+			put("Sachbearbeiter",9);
+			put("Sachbearbeiterin",9);
+			put("Kundenname",10);
+			put("Kundennamen",10);
+			put("Kunde",10);
+			put("Kunden",10);
+			put("Hundename",10);
+			put("Hundenamen",10);
 		}});
-		
-
 	}};
 	public static int getDescriptorNumber(String searchClass, String word){
 		if (descriptorMap.get(searchClass) == null){
