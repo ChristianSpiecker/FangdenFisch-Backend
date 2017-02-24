@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ import com.ser.blueline.metaDataComponents.IDialog;
 import com.ser.blueline.metaDataComponents.IQueryClass;
 import com.ser.blueline.metaDataComponents.IQueryDlg;
 
+import nlp.Result;
 import nlp.SimpleGermanExample;
 
 public class Controller {
@@ -121,17 +123,44 @@ public class Controller {
 					
 			// was soll gelesen werden?
 			InputStream inputStream = documentPart.getRawDataAsStream();
-				
-			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+			String filename = documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1];
+			filename = normalizeFilename(filename);
+			// File im Resultobjekt adden
+			Result.getInstance().addFile(inputStream, filename);
+			
+			saveDocuments(inputStream, filename);
 		}
 	}
-	
-	
+
+	public String normalizeFilename(String f){
+		char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+		
+		for (int i=0; i< ILLEGAL_CHARACTERS.length; i++){
+			f.replace(ILLEGAL_CHARACTERS[i], ' ');
+		}
+		
+		f = f.replace("ä", "ae");
+		f = f.replace("?", " ");
+		f = f.replace("Ì", " ");
+		f = f.replace("ä", "ae");
+		f = f.replace("ü", "ue")
+                .replace("ö", "oe")
+                .replace("ä", "ae")
+                .replace("ß", "ss");
+
+		f = f.replace("Ü", "UE")
+          .replace("Ö", "OE")
+          .replace("Ä", "AE");
+		
+		f = Normalizer.normalize(f, Normalizer.Form.NFKC);
+		return f;
+	}
 
 	private static void saveDocuments(InputStream inputStream, String docName) throws IOException{
 
 		// wohin soll geschrieben werden?
 		File file = new File(docName);
+		System.out.println(docName);
 		file.createNewFile();
 		FileOutputStream writer = new FileOutputStream(file);
 		// auf Festplatte schreiben

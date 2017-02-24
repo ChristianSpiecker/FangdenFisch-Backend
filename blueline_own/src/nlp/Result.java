@@ -1,6 +1,7 @@
 package nlp;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.ser.blueline.BlueLineException;
@@ -25,6 +26,8 @@ public class Result {
 	ArrayList<String> searchword = new ArrayList<>();
 	ArrayList<String> searchclass = new ArrayList<>();
 	ArrayList<String> descriptor = new ArrayList<>();
+	ArrayList<InputStream> files = new ArrayList<>();
+	ArrayList<String> filenames = new ArrayList<>();
 	String tree = null;
 	
 	private static Result instance;
@@ -37,6 +40,15 @@ public class Result {
 	
 	public Result(){
 
+	}
+	
+	public void reset(){
+		searchword.clear();
+		searchclass.clear();
+		descriptor.clear();
+		files.clear();
+		filenames.clear();
+		tree = null;
 	}
 	
 	public int evaluate(){
@@ -60,6 +72,27 @@ public class Result {
 	public void addTree(String tree){
 		this.tree = tree;
 	}
+	
+	public void addFile(InputStream stream, String filename){
+		files.add(stream);
+		filenames.add(filename);
+	}
+	public int fileCount(){
+		return files.size();
+	}
+	public InputStream getFile(int i){
+		if(i >= 0 && i < files.size()){
+			return files.get(i);
+		}
+		return null;
+	}
+	public String getFilename(int i){
+		if(i >= 0 && i < filenames.size()){
+			return filenames.get(i);
+		}
+		return null;
+	}
+	
 	
 	public String getTree(){
 		return tree;
