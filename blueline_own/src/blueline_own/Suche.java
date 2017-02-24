@@ -70,7 +70,7 @@ public class Suche {
 		// Suchanfrage anfuegen
 
 		String anfrage = inputStreamString();
-	
+		
 		valueDescriptor.addValue(anfrage);
 		
 		Date d = new Date();
@@ -78,7 +78,7 @@ public class Suche {
 		d.setYear(1900);d.setDate(2);d.setMonth(0);e.setYear(2500);e.setDate(2);e.setMonth(0);
 		//server.query(arg0, session);
 		
-		for(String s : server.searchAttributeValues(session, "SELECT * FROM DMS WHERE (Kundennummer = '4567891');", false, null, null, 20)){
+		for(String s : server.searchAttributeValues(session, "SELECT Kundenname FROM DMS WHERE Kundennummer='4567891' ORDER BY Kundenname;", false, null, null, 20)){
 			System.out.println(s);
 		}
 		
@@ -102,7 +102,9 @@ public class Suche {
 		
 		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
 		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
+		param.setStartDate(null);
 		param.addValueDescriptor(valueDescriptor);
+		
 		//param.setOrderByExpression(arg0);
 		System.out.println(param.getQueryToExecute());
 
