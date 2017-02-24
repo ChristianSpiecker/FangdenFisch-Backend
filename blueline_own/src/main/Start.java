@@ -14,7 +14,9 @@ public class Start {
 	public static void main(String[]args){
 		//testeNLP(); 
 		// Zum Test des NLP's auskommentieren
+
 		//SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+
 		try {
 			Controller.getInstance();
 		} catch (IOException | BlueLineException e) {

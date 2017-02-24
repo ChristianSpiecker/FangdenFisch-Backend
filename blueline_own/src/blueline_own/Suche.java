@@ -3,6 +3,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.swing.JOptionPane;
+
 import com.ser.blueline.BlueLineException;
 import com.ser.blueline.IDescriptor;
 import com.ser.blueline.IDocument;
@@ -10,7 +15,10 @@ import com.ser.blueline.IDocumentHitList;
 import com.ser.blueline.IDocumentServer;
 import com.ser.blueline.IFulltextEngine;
 import com.ser.blueline.IProperties;
+import com.ser.blueline.IQueryExpression;
+import com.ser.blueline.IQueryOperator;
 import com.ser.blueline.IQueryParameter;
+import com.ser.blueline.IQueryValueDescriptor;
 import com.ser.blueline.ISerClassFactory;
 import com.ser.blueline.ISession;
 import com.ser.blueline.ISystem;
@@ -26,6 +34,7 @@ import com.ser.blueline.metaDataComponents.IQueryClass;
 import com.ser.blueline.metaDataComponents.IQueryDlg;
 import com.ser.sedna.client.bluelineimpl.SEDNABluelineAdapterFactory;
 
+import nlp.DescriptorMapper;
 import nlp.SearchClassMapper;
 
 public class Suche {
@@ -51,6 +60,7 @@ public class Suche {
 		
 		// DIALOG UND DESKRIPTOR
 		// suche (Default-) Dialog aus der gewählten Suchklasse
+
 		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
 		// wähle daraus einen passenden Deskriptor aus
 		IDescriptor descriptor = chooseDescriptor(dialog);
@@ -58,19 +68,121 @@ public class Suche {
 		// IValueDescriptor generieren
 		IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
 		// Suchanfrage anfuegen
-		System.out.println(descriptor.getName() + ": ");
+
 		String anfrage = inputStreamString();
+	
 		valueDescriptor.addValue(anfrage);
+		
+		Date d = new Date();
+		Date e = new Date();
+		d.setYear(1900);d.setDate(2);d.setMonth(0);e.setYear(2500);e.setDate(2);e.setMonth(0);
+		//server.query(arg0, session);
+		
+		for(String s : server.searchAttributeValues(session, "SELECT Kundenname FROM DMS", false, d, e, 20)){
+			System.out.println(s);
+		}
+		
+		for(String s : session.getDatabaseNames() ){
+			System.out.println(s);
+		}
+		
+		
+		// alternative Herangehensweise
+				HashMap<String, String> searchDescriptors = new HashMap<String, String>();
+		        searchDescriptors.put(descriptor.getId(), "Rheinwerk Group");
+		        
+		        IQueryParameter queryParameter = query(session, dialog, searchDescriptors);
+				
+				
+				IDocumentHitList result = executeQuery(session, queryParameter);
+				System.out.println(result.getDocumentObjects().length);
+		// bis hier
+		
+		
 		
 		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
 		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
 		param.addValueDescriptor(valueDescriptor);
-		
-		// Server anfragen und das Ergebnis speichern
+		//param.setOrderByExpression(arg0);
+		System.out.println(param.getQueryToExecute());
+
+		//param.setExpression(factory.getExpressionInstance("SELECT Kundennummer FROM DMS WHERE (Kundennummer = '4567891');"));
+
 		IDocumentHitList hitList = server.query(param, session);
+
 		System.out.println(hitList.getTotalHitCount());
+		System.out.println(hitList.getInformationObjects().length + " <- Hitlist l�nge");
+
 		return hitList.getDocumentObjects();
 	}
+	
+	 public IDocumentHitList executeQuery(ISession session, IQueryParameter queryParameter)
+	            throws BlueLineException
+	    {
+	        IDocumentHitList result = server.query(queryParameter, session);
+	        return result;
+	    }
+	
+	public IQueryParameter query(ISession session, IQueryDlg queryDlg, HashMap<String, String> descriptorValues)
+            throws BlueLineException
+    {
+        IQueryParameter queryParameter = null;
+        IQueryExpression expression = null;
+        // Retrieve all components from the query dialog
+        IComponent components[] = queryDlg.getComponents();
+        int i;
+
+        // Create the query expression by traversing over all components of the dialog.
+        for (i = 0; i < components.length; i++)
+        {
+            // If the component is a masked edit field, check for the assigned descriptor.
+            if (components[i].getType() == IMaskedEdit.TYPE)
+            {
+                // If the component is of type "masked edit", the component might be casted to
+                // IControl or IMaskedEdit.
+                IControl control = (IControl) components[i];
+
+                // Get the descriptor ID from the control.
+                String descriptorId = control.getDescriptorID();
+
+                // Get the value for this descriptor.
+                String value = (String) descriptorValues.get(descriptorId);
+
+                // If the value is not null and not an empty string, add this descriptor to the
+                // query expression. Descriptors on documents must not be null or empty strings.
+                if (value != null && value.trim().length() > 0)
+                {
+                    IQueryValueDescriptor queryValueDescriptor;
+
+                    // Get the descriptor instance from the document server.
+                    IDescriptor descriptor = server.getDescriptor(descriptorId, session);
+
+                    // Create a value descriptor for the descriptor instance and add the value.
+                    queryValueDescriptor = factory.getQueryValueDescriptorInstance(descriptor);
+                    queryValueDescriptor.addValue(value);
+
+                    // Create an expression instance for this query value descriptor.
+                    IQueryExpression expr = queryValueDescriptor.getExpression();
+
+                    // If expression has been built during the previous loops, combine the existing
+                    // expression with the new one using the AND operator.
+                    if (expression != null)
+                        expression = factory.getExpressionInstance(expression, expr, IQueryOperator.AND);
+                    // Otherwise just initialize expression with expr.
+                    else
+                        expression = expr;
+                }
+            }
+        }
+
+        if (expression != null)
+        {
+            // Create a query parameter instance from the session, the query dialog to use and
+            // the constructed expression.
+            queryParameter = factory.getQueryParameterInstance(session, queryDlg, expression);
+        }
+        return queryParameter;
+    }
 	private IQueryClass getQueryClass(String searchclass){
 		for(IQueryClass queryClass : queryClasses){
 			if (searchclass.equals(queryClass))return queryClass;
@@ -199,6 +311,9 @@ public IDocument[] descriptorsearchDocument(int searchclass, String searchword, 
 		int number = inputStreamInteger();
 		return descriptors.get(number);
 	}
+	
+	 
+
 	
 	public ArrayList<IDescriptor> getDescriptors(IQueryDlg dialog) throws BlueLineException{
 		// alle Komponenten dieses Eingabe-Dialoges zwischenspeichern
