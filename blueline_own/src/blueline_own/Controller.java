@@ -57,8 +57,9 @@ public class Controller {
 		//Search Document
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
 		IDocument[] documents = suche.searchDocument();
-				
+		System.out.println(documents.length);
 		for(IDocument document : documents){
+			System.out.println("DOKUMENT GEFUNDEN");
 			// alle Repraesentationen dieses Dokuments abrufen
 			IRepresentation[] representationList = document.getRepresentationList();
 			int representationNr = document.getDefaultRepresentation();
@@ -83,6 +84,7 @@ public class Controller {
 		IDocument[] documents = suche.mysearchDocument(searchclass, searchword);
 				
 		for(IDocument document : documents){
+			System.out.println("DOKUMENT GEFUNDEN");
 			// alle Repraesentationen dieses Dokuments abrufen
 			IRepresentation[] representationList = document.getRepresentationList();
 			int representationNr = document.getDefaultRepresentation();

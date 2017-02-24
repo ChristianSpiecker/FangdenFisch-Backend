@@ -78,7 +78,7 @@ public class Suche {
 		d.setYear(1900);d.setDate(2);d.setMonth(0);e.setYear(2500);e.setDate(2);e.setMonth(0);
 		//server.query(arg0, session);
 		
-		for(String s : server.searchAttributeValues(session, "SELECT Kundenname FROM DMS", false, d, e, 20)){
+		for(String s : server.searchAttributeValues(session, "SELECT * FROM DMS WHERE (Kundennummer = '4567891');", false, null, null, 20)){
 			System.out.println(s);
 		}
 		
