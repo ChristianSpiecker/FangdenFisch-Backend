@@ -44,7 +44,7 @@ public class Suche {
 	
 	@SuppressWarnings("deprecation")
 	public IDocument[] searchDocument() throws BlueLineException, NumberFormatException, IOException{
-		
+		System.out.println("normal search");
 		// DOKUMENTENKLASSE
 		System.out.println("Dokumentenklasse auswaehlen!");
 		IQueryClass queryClass = chooseQueryClass();
@@ -68,6 +68,7 @@ public class Suche {
 		
 		// Server anfragen und das Ergebnis speichern
 		IDocumentHitList hitList = server.query(param, session);
+		System.out.println(hitList.getTotalHitCount());
 		return hitList.getDocumentObjects();
 	}
 	private IQueryClass getQueryClass(String searchclass){
@@ -77,7 +78,7 @@ public class Suche {
 		return null;
 	}
 	public IDocument[] mysearchDocument(String searchclass, String searchword) throws BlueLineException, NumberFormatException, IOException{
-		
+		System.out.println("MY");
 		// DOKUMENTENKLASSE
 		System.out.println("Dokumentenklasse auswaehlen!");
 		
