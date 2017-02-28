@@ -27,8 +27,13 @@ public class Start {
 		//testeNLP("gib mir alle Rechnungen von der Rheinwerk Group");
 		//testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 		
-		
-		sigeex.myanalyseText("gib mir alle Prospekte vom Kunden ");
+		sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group seit dem 15.12.2016");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group ab dem 1.1.1000");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group vom 1.1.1000 bis zum 2.1.1000");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group vor dem 1.1.1000");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group nach dem 1.1.1000");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group zwischen dem 1.1.1000 und dem 2.1.1000");
+		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 		
 		
 		TCPServer.bluelinestuff();

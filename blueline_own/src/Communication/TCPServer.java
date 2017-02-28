@@ -2,6 +2,7 @@ package Communication;
 
 import java.io.*;
 import java.net.*;
+import java.util.Date;
 
 import com.ser.blueline.BlueLineException;
 
@@ -29,7 +30,7 @@ public class TCPServer {
 
 			DataOutputStream outToClient = new DataOutputStream(
 					connectionSocket.getOutputStream());
-
+			//WARUMMMMMMMMM
 			clientSentence = inFromClient.readLine().replace('+', ' ');
 			
 			if(clientSentence != null){
@@ -45,9 +46,20 @@ public class TCPServer {
 				
 				//File gefunden
 				if(res.fileCount() > 0){
+					
 					for(int i=0; i<res.fileCount();i++){
-						outToClient.writeBytes(res.getFilename(i)+"?"+res.getFile(i) + "\n");
-						System.out.println("Gesendet: "+res.getFilename(i) + "\n");
+						System.out.println("Start");
+						//outToClient.writeBytes(res.getFilename(i)+ "\n");
+						//System.out.println("Gesendet: "+res.getFilename(i) + "\n");
+						BufferedInputStream act =res.getFile(i);
+						int read;
+						while ((read= act.read()) != -1) {
+							outToClient.write(read);
+						}
+						outToClient.write(-1);
+						outToClient.flush();
+						System.out.println("\nFertig");
+
 					}
 				}else{
 					//kein File gefunden
@@ -65,27 +77,38 @@ public class TCPServer {
 
 	
 	public static void bluelinestuff(){
-		try {
-			Result res = Result.getInstance();
-			Controller.getInstance().mysearch(res.getsearchclass(0), res.getSearchword(0));
+		Result res = Result.getInstance();
+		
+		
+		switch(res.evaluate()){
+		case(0):{
+		// TODO Volltext
+		}
+		case(1):{
+		// TODO Strukturiert Suchklasse		
+		}
+		case(2):{
+			// TODO Strukturiert Suchklasse + Suchwort
 			
-			switch(Result.getInstance().evaluate()){
-			case(0):{
-			// TODO Volltext
-			}
-			case(1):{
-			// TODO Strukturiert Suchklasse		
-			}
-			case(2):{
-				// TODO Strukturiert Suchklasse + Suchwort
-			}
-			case(3):{
-				
-				int searchClass = SearchClassMapper.getSearchClassNumber(Result.getInstance().getsearchclass(0));
-				int descriptor_Number = DescriptorMapper.getDescriptorNumber(Result.getInstance().getsearchclass(0), Result.getInstance().getdescriptor(0));
-				String searchword = Result.getInstance().getSearchword(0);
+		
+		}
+		case(3):{
+			int searchClass = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
+			int descriptor_Number = DescriptorMapper.getDescriptorNumber(res.getsearchclass(0), res.getdescriptor(0));
+			String searchword = res.getSearchword(0);
+			
+			Date firstDate = null;
+			if(res.getDate(0) != null) firstDate = res.getDate(0);
+			Date secondDate = null;
+			if(res.getDate(1) != null) firstDate = res.getDate(1);
+			
+
+			if(searchClass < 0 || descriptor_Number < 0){
+				//TODO ungültige anfrage
+				System.out.println("Ungültige Anfrage brooo");
+			}else{
 				try {
-					Controller.getInstance().descriptorsearch(searchClass, searchword, descriptor_Number);
+					Controller.getInstance().descriptorsearch(searchClass, searchword, descriptor_Number, firstDate, secondDate, res.getDatestate());
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -97,15 +120,14 @@ public class TCPServer {
 					e.printStackTrace();
 				}
 			}
-		}
 			
-		} catch (IOException e) {
-			System.out.println(e.toString());
-			e.printStackTrace();
-		} catch (BlueLineException e) {
-			System.out.println(e.toString());
-			e.printStackTrace();
 		}
+		default:{
+			if (res.getsearchclass(0) == null && res.getdescriptor(0) == null && res.getSearchword(0) == null){
+				System.out.println("Nix gefunden boyy");
+			}
+		}
+}
 	}
 	
 

@@ -1,7 +1,11 @@
 package nlp;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.ser.blueline.BlueLineException;
@@ -26,10 +30,20 @@ public class Result {
 	ArrayList<String> searchword = new ArrayList<>();
 	ArrayList<String> searchclass = new ArrayList<>();
 	ArrayList<String> descriptor = new ArrayList<>();
-	ArrayList<InputStream> files = new ArrayList<>();
+	ArrayList<BufferedInputStream> files = new ArrayList<>();
 	ArrayList<String> filenames = new ArrayList<>();
 	String tree = null;
-	
+	ArrayList<Date> date = new ArrayList<>();
+	public Date getDate(int index) {
+		if(index >= date.size()){
+			return null;
+		}
+		return date.get(index);
+	}
+	private int datestate = -1; // 0 == vor : 1 == ab
+	public int getDatestate() {
+		return datestate;
+	}
 	private static Result instance;
 	public static Result getInstance (){
 		    if (Result.instance == null) {
@@ -49,8 +63,45 @@ public class Result {
 		files.clear();
 		filenames.clear();
 		tree = null;
+		datestate = -1;
 	}
 	
+
+	public void addDate(String d){
+		// TODO abfangen wenn kein jahr gegeben
+
+		SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy");
+		try {
+		    Date da = f.parse(d);
+		    date.add(da);
+		    System.out.println("Date geaddet: "+da);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Date dt = new Date(Integer.parseInt(d.split("\\.")[2]),Integer.parseInt(d.split("\\.")[1]), Integer.parseInt(d.split("\\.")[0]));
+			date.add(dt);
+		}
+		
+		
+	}
+	
+	public int addTemp_Preposition(String temp_preposition){
+		String [] before = {"bis","vor"};
+		String [] after = {"ab","seit"};
+		for(String word : before){
+			if(temp_preposition.equals(word)){
+				datestate = 0;
+				return 0;
+			}
+		}
+		
+		for(String word : after){
+			if(temp_preposition.equals(word)){
+				datestate = 1;
+				return 1;
+			}
+		}
+		return -1;
+	}
 	public int evaluate(){
 		if(searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
 			// 0 Suchwort   ->   Volltext
@@ -73,14 +124,14 @@ public class Result {
 		this.tree = tree;
 	}
 	
-	public void addFile(InputStream stream, String filename){
+	public void addFile(BufferedInputStream stream, String filename){
 		files.add(stream);
 		filenames.add(filename);
 	}
 	public int fileCount(){
 		return files.size();
 	}
-	public InputStream getFile(int i){
+	public BufferedInputStream getFile(int i){
 		if(i >= 0 && i < files.size()){
 			return files.get(i);
 		}
@@ -88,7 +139,7 @@ public class Result {
 	}
 	public String getFilename(int i){
 		if(i >= 0 && i < filenames.size()){
-			return filenames.get(i);
+			return filenames.get(i).intern();
 		}
 		return null;
 	}

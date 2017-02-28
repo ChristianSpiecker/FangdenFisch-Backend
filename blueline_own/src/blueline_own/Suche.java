@@ -152,7 +152,7 @@ public class Suche {
 	}
 	
 	
-public IDocument[] descriptorsearchDocument(int searchclass, String searchword, int descriptor_Number) throws BlueLineException, NumberFormatException, IOException{
+public IDocument[] descriptorsearchDocument(int searchclass, String searchword, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws BlueLineException, NumberFormatException, IOException{
 		
 		IQueryClass queryClass = queryClasses[searchclass]; 
 
@@ -180,6 +180,33 @@ public IDocument[] descriptorsearchDocument(int searchclass, String searchword, 
 		// zum Testen
 		param.setHitLimit(1);
 		param.setHitLimitThreshold(1);
+		
+		if(firstDate != null && secondDate != null){
+			if(firstDate.getTime() < secondDate.getTime()){
+				param.setStartDate(firstDate);
+				param.setEndDate(secondDate);
+			}else{
+				param.setStartDate(secondDate);
+				param.setEndDate(firstDate);
+			}
+		}
+		if(firstDate != null){
+			if(dateState == 0){
+				/*param.addValueDescriptor(getDateDescriptor());
+				IDescriptor datedescriptor = getDescriptors(dialog).get(descriptor_Number);
+				System.out.println(descriptor.getDisplayString(session));
+
+				IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
+				valueDescriptor.addValue(searchword);
+				*/
+				param.setEndDate(firstDate);
+			}else if(dateState == 1){
+				param.setStartDate(firstDate);
+			}
+			
+		}
+		
+		
 		
 		// Server anfragen und das Ergebnis speichern
 		IDocumentHitList hitList = server.query(param, session);

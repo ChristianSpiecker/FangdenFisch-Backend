@@ -140,6 +140,24 @@ public class SimpleGermanExample {
     private void handleTree(Tree tree){
     	traverse(tree);
     }
+    
+    private void checkCARD(Tree card){
+    	Tree children [] = card.children();
+    	for(int i=0; i < children.length; i++){
+    		//Datum
+	    	if (children[i].nodeString().startsWith("CARD")){
+	
+				String date =children[i].firstChild().nodeString();
+				System.out.println("Datum geaddet: " + date);
+				Result.getInstance().addDate(date);
+				// Überprüft ob ab oder bis zu dem Datum gesucht werden soll
+	    	} else if (children[i].nodeString().equals("APPR")){
+	    		String temp_preposition = children[i].firstChild().nodeString();
+	    		System.out.println("preposition geaddet: " + temp_preposition);
+	    		Result.getInstance().addTemp_Preposition(temp_preposition);
+	    	}
+    	}
+    }
     private void checkPP(Tree pp){
     	Tree children [] = pp.children();
     	for(int i=0; i < children.length; i++){
@@ -204,6 +222,8 @@ public class SimpleGermanExample {
     	
     	if (tree.nodeString().startsWith("NP")){
     		checkNP(tree);
+    	} else if(tree.nodeString().startsWith("PP")){
+    		checkCARD(tree);
     	}
     	Tree children [] = tree.children();
     	if(children != null){

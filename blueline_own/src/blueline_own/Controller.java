@@ -1,11 +1,13 @@
 package blueline_own;
 import com.ser.blueline.metaDataComponents.IQueryClass;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
+import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -99,16 +101,17 @@ public class Controller {
 					
 			// was soll gelesen werden?
 			InputStream inputStream = documentPart.getRawDataAsStream();
+			System.out.println("gesplittet");
 				
 			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
 		}
 	}
 	
-	public void descriptorsearch(int searchclass, String searchword, int descriptor_Number) throws NumberFormatException, BlueLineException, IOException{
+	public void descriptorsearch(int searchclass, String searchword, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws NumberFormatException, BlueLineException, IOException{
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
 		
-		IDocument[] documents = suche.descriptorsearchDocument(searchclass, searchword, descriptor_Number);
-				
+		IDocument[] documents = suche.descriptorsearchDocument(searchclass, searchword, descriptor_Number, firstDate, secondDate, dateState);
+		
 		for(IDocument document : documents){
 			System.out.println("DOKUMENT ERHALTEN");
 			// alle Repraesentationen dieses Dokuments abrufen
@@ -120,15 +123,24 @@ public class Controller {
 					
 			// erstes Teildokument der Repraesentation herunterladen
 			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+			
 					
 			// was soll gelesen werden?
 			InputStream inputStream = documentPart.getRawDataAsStream();
 			String filename = documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1];
 			filename = normalizeFilename(filename);
 			// File im Resultobjekt adden
-			Result.getInstance().addFile(inputStream, filename);
 			
-			saveDocuments(inputStream, filename);
+			System.out.println(inputStream.read());
+
+
+			BufferedInputStream bis = new BufferedInputStream(inputStream);
+			
+			Result.getInstance().addFile(bis, filename);
+			
+			
+			
+			//saveDocuments(inputStream, filename);
 		}
 	}
 
