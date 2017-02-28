@@ -40,7 +40,12 @@ public class Start {
 		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 		
 		
-		TCPServer.bluelinestuff();
+		try {
+			TCPServer.bluelinestuff();
+		} catch (NumberFormatException | BlueLineException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	

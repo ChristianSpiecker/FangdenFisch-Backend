@@ -158,7 +158,7 @@ public class SimpleGermanExample {
 	    	}
     	}
     }
-    private void checkPP(Tree pp){
+    private void checkPPinNP(Tree pp){
     	Tree children [] = pp.children();
     	for(int i=0; i < children.length; i++){
 			if (children[i].nodeString().startsWith("NN")){
@@ -208,8 +208,42 @@ public class SimpleGermanExample {
 				Result.getInstance().setsearchclass(children[i].firstChild().nodeString());
 			}else if (children[i].nodeString().startsWith("PP")){
 				
-				checkPP(children[i]);
+				checkPPinNP(children[i]);
 				
+			}
+		}
+    	
+    	
+    	
+    }
+    //PP außerhalb von NP
+    private void checkPP(Tree pp){
+    	Tree children [] = pp.children();
+    	for(int i=0; i < children.length; i++){
+    		// Eigenwort
+			if (children[i].nodeString().startsWith("NE")){
+				String searchword = children[i].firstChild().nodeString();
+				System.out.println("Suchwort geaddet: " + searchword);
+				Result.getInstance().setSearchword(searchword);
+			//zusammengesetzes Eigenwort
+			}else if (children[i].nodeString().startsWith("MPN")){
+				String erstesNE = children[i].getChild(0).toString().split(" ")[1];
+				String zweitesNE = children[i].getChild(1).toString().split(" ")[1];
+				String searchword = erstesNE.substring(0,erstesNE.length()-1).concat(" ").concat(zweitesNE.substring(0,zweitesNE.length()-1));
+				System.out.println("Suchwort geaddet: " + searchword);
+				Result.getInstance().setSearchword(searchword);
+				
+			}else if(children[i].nodeString().startsWith("ADJA")){
+				// ADJA ist eine ortsbezogene Angabe und bezieht sich immer auf ein darauffolgendes Nomen 
+				//somit ist i+1 niemals außerhalb des Baumes | Beispiel: Frankfurter Zoo, Bremer Warenhaus
+				if(children[i+1].nodeString().startsWith("NN")){
+					String erstesNE = children[i].firstChild().nodeString();
+					String zweitesNE = children[i+1].firstChild().nodeString();
+					String searchword = erstesNE.substring(0,erstesNE.length()).concat(" ").concat(zweitesNE.substring(0,zweitesNE.length()));
+					System.out.println("Suchwort geaddet: " + searchword);
+					Result.getInstance().setSearchword(searchword);
+					
+				}
 			}
 		}
     	
@@ -224,6 +258,7 @@ public class SimpleGermanExample {
     		checkNP(tree);
     	} else if(tree.nodeString().startsWith("PP")){
     		checkCARD(tree);
+    		checkPP(tree);
     	}
     	Tree children [] = tree.children();
     	if(children != null){

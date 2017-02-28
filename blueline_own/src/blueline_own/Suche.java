@@ -185,7 +185,38 @@ public class Suche {
 		IDocumentHitList hitList = server.query(param, session);
 		return hitList.getDocumentObjects();
 	}
+
+public List<IDocument> fulltextSearch(String searchword) throws BlueLineException, NumberFormatException, IOException{
+		
+	// Suchklasse mit Deskriptor mit Fulltextunterstuetzung
+	IQueryClass queryClass = queryClasses[5]; 
+
+	IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
+	// Einziger Deskriptor mit Fulltextunterstuetzung
+	IDescriptor descriptor = getDescriptors(dialog).get(10);
 	
+
+	IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
+	
+	valueDescriptor.addValue(searchword);
+	valueDescriptor.isFulltext();
+	
+	
+	// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
+	IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
+	param.setStartDate(null);
+	
+	param.addValueDescriptor(valueDescriptor);
+	
+	IDocumentHitList hitList = server.query(param, session);
+		
+		List<IDocument> documents = new ArrayList<IDocument>();	
+		for(IDocument act_doc : hitList.getDocuments()){
+			documents.add(act_doc);
+		}
+
+		return documents;
+	}
 	
 public List<IDocument> descriptorsearchDocument(int searchclass, String searchClassString, String searchword, String descriptor, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws BlueLineException, NumberFormatException, IOException{
 		

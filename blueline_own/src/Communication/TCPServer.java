@@ -19,8 +19,8 @@ public class TCPServer {
 
 		ServerSocket welcomeSocket = new ServerSocket(420);
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
-		System.out.println("Server rennt");
 		Controller.getInstance();
+		System.out.println("Server rennt");
 		while (true) {
 
 			Socket connectionSocket = welcomeSocket.accept();
@@ -76,21 +76,27 @@ public class TCPServer {
 	
 
 	
-	public static void bluelinestuff(){
+	public static void bluelinestuff() throws NumberFormatException, BlueLineException, IOException{
 		Result res = Result.getInstance();
 		
 		
 		switch(res.evaluate()){
 		case(0):{
 		// TODO Volltext
+			System.out.println(res.getSearchword(0));
+			
+			Controller.getInstance().fulltextSearch(res.getSearchword(0));
+
+			break;
 		}
 		case(1):{
-		// TODO Strukturiert Suchklasse		
+		// TODO Strukturiert Suchklasse	
+			break;
 		}
 		case(2):{
 			// TODO Strukturiert Suchklasse + Suchwort
 			
-		
+			break;
 		}
 		case(3):{
 			int searchClass = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
@@ -108,27 +114,17 @@ public class TCPServer {
 				//TODO ungültige anfrage
 				System.out.println("Ungültige Anfrage brooo");
 			}else{
-				try {
-					Controller.getInstance().descriptorsearch(searchClass,searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, res.getDatestate());
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (BlueLineException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Controller.getInstance().descriptorsearch(searchClass,searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, res.getDatestate());
 			}
-			
+			break;
 		}
 		default:{
 			if (res.getsearchclass(0) == null && res.getdescriptor(0) == null && res.getSearchword(0) == null){
 				System.out.println("Nix gefunden boyy");
 			}
+			break;
 		}
-}
+		}
 	}
 	
 

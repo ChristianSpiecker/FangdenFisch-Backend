@@ -107,6 +107,7 @@ public class Result {
 	public int evaluate(){
 		if(searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
 			// 0 Suchwort   ->   Volltext
+			System.out.println("nullter fall");
 			return 0;
 		}else if(!searchclass.isEmpty() && descriptor.isEmpty() && searchword.isEmpty()){
 			// 1 Suchklasse ->	Strukturiert
@@ -116,6 +117,7 @@ public class Result {
 			return 2;
 		}else if(!searchclass.isEmpty() && !descriptor.isEmpty() && !searchword.isEmpty()){
 			//3 Suchklasse + Suchwort + Deskriptor -> Strukturiert
+			System.out.println("dritter fall");
 			return 3;
 		}
 		
