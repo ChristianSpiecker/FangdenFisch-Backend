@@ -34,13 +34,8 @@ public class Result {
 	ArrayList<String> filenames = new ArrayList<>();
 	String tree = null;
 	ArrayList<Date> date = new ArrayList<>();
-	public Date getDate(int index) {
-		if(index >= date.size()){
-			return null;
-		}
-		return date.get(index);
-	}
 	private int datestate = -1; // 0 == vor : 1 == ab
+	
 	public int getDatestate() {
 		return datestate;
 	}
@@ -54,6 +49,13 @@ public class Result {
 	
 	public Result(){
 
+	}
+	
+	public Date getDate(int index) {
+		if(index >= date.size()){
+			return null;
+		}
+		return date.get(index);
 	}
 	
 	public void reset(){

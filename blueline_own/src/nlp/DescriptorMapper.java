@@ -304,6 +304,42 @@ public class DescriptorMapper {
 			put("Hundenamen",10);
 		}});
 	}};
+	private static Map<String,String>  descriptorNameMap = new HashMap<String,String>(){{
+			put("00", "Kundenname");
+			put("01", "Bestelldatum");
+			put("02", "Angebotsnummer");
+			put("03", "Auftragsnummer");
+			put("10", "Auftragsnummer Kunde");
+			put("11", "Kundenname");
+			put("12", "Angebotsdatum");
+			put("13", "Angebotsnummer");
+			put("20", "Artikelnamen");
+			put("21", "Typenbezeichnungen");
+			put("30", "Kundenname");
+			put("31", "Lieferadresse");
+			put("32", "Auftragsnummer Kunde");
+			put("33", "Artikelnummer");
+			put("34", "Lieferscheindatum");
+			put("35", "Lieferscheinnummer");
+			put("40", "Angebotsdatum");
+			put("41", "Angebotnummer");
+			put("42", "Kundenname");
+			put("50", "Angebotnummer");
+			put("51", "Angebotsdatum");
+			put("52", "Auftragsnummer");
+			put("53", "Bestelldatum");
+			put("54", "Gesamtpreis Brutto");
+			put("55", "Gesamtpreis Netto");
+			put("56", "Kundennummer");
+			put("57", "Rechnungsdatum");
+			put("58", "Rechnungsnummer");
+			put("59", "Sachbearbeiter");
+			put("510", "Kundenname");
+			put("60", "Kundenname");
+			put("61", "Artikelname");
+			put("62", "Anfragedatum");
+
+	}};
 	public static int getDescriptorNumber(String searchClass, String word){
 		if (descriptorMap.get(searchClass) == null){
 			return -1;
@@ -315,5 +351,14 @@ public class DescriptorMapper {
 		}
 		
 		return descriptorMap.get(searchClass).get(word);
+	}
+	public static String getDescriptorName(int descriptor, int searchclass){
+		String key = Integer.toString(searchclass)+Integer.toString(descriptor);
+		System.out.println(key);
+		if (descriptorNameMap.get(key) == null){
+			return "Error";
+		}
+		return descriptorNameMap.get(key);
+		
 	}
 }

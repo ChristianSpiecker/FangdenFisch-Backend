@@ -95,9 +95,10 @@ public class TCPServer {
 		case(3):{
 			int searchClass = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
 			int descriptor_Number = DescriptorMapper.getDescriptorNumber(res.getsearchclass(0), res.getdescriptor(0));
+			String descriptor = DescriptorMapper.getDescriptorName(descriptor_Number, searchClass);
 			String searchword = res.getSearchword(0);
-			
-			Date firstDate = null;
+			String searchClassString = res.getsearchclass(0);
+						Date firstDate = null;
 			if(res.getDate(0) != null) firstDate = res.getDate(0);
 			Date secondDate = null;
 			if(res.getDate(1) != null) firstDate = res.getDate(1);
@@ -108,7 +109,7 @@ public class TCPServer {
 				System.out.println("Ungültige Anfrage brooo");
 			}else{
 				try {
-					Controller.getInstance().descriptorsearch(searchClass, searchword, descriptor_Number, firstDate, secondDate, res.getDatestate());
+					Controller.getInstance().descriptorsearch(searchClass,searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, res.getDatestate());
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

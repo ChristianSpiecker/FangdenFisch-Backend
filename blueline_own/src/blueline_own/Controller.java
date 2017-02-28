@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -107,10 +108,10 @@ public class Controller {
 		}
 	}
 	
-	public void descriptorsearch(int searchclass, String searchword, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws NumberFormatException, BlueLineException, IOException{
+	public void descriptorsearch(int searchclass,String  searchClassString, String searchword, String descriptor, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws NumberFormatException, BlueLineException, IOException{
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
 		
-		IDocument[] documents = suche.descriptorsearchDocument(searchclass, searchword, descriptor_Number, firstDate, secondDate, dateState);
+		List<IDocument> documents = suche.descriptorsearchDocument(searchclass,searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, dateState);
 		
 		for(IDocument document : documents){
 			System.out.println("DOKUMENT ERHALTEN");
@@ -123,7 +124,6 @@ public class Controller {
 					
 			// erstes Teildokument der Repraesentation herunterladen
 			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
-			
 					
 			// was soll gelesen werden?
 			InputStream inputStream = documentPart.getRawDataAsStream();
@@ -131,7 +131,6 @@ public class Controller {
 			filename = normalizeFilename(filename);
 			// File im Resultobjekt adden
 			
-			System.out.println(inputStream.read());
 
 
 			BufferedInputStream bis = new BufferedInputStream(inputStream);
@@ -140,7 +139,7 @@ public class Controller {
 			
 			
 			
-			//saveDocuments(inputStream, filename);
+			saveDocuments(inputStream, filename);
 		}
 	}
 

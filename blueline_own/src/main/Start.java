@@ -28,6 +28,10 @@ public class Start {
 		//testeNLP("gib mir alle Rechnungen vom Kunden Rheinwerk Group");
 		
 		sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group seit dem 15.12.2016");
+		//Good guy anfragen
+		//Gib mir alle Rechnungen vom Kunden Rheinwerk Group bis zum 17.09.2014
+		//gib mir alle Rechnungen vom Kunden Rheinwerk Group
+		
 		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group ab dem 1.1.1000");
 		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group vom 1.1.1000 bis zum 2.1.1000");
 		//sigeex.myanalyseText("gib mir alle Rechnungen vom Kunden Rheinwerk Group vor dem 1.1.1000");

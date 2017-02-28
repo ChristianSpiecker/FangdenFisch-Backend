@@ -21,11 +21,11 @@ public class SearchClassMapper {
 		put("Angebot",4);
 		put("Angebote",4);
 		
-		put("Anfrage",5);
-		put("Anfragen",5);
+		put("Anfrage",6);
+		put("Anfragen",6);
 		
-		put("Rechnung",6);
-		put("Rechnungen",6);
+		put("Rechnung",5);
+		put("Rechnungen",5);
 		
 	}};
 

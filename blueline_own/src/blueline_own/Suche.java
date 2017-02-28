@@ -3,17 +3,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import com.ser.blueline.BlueLineException;
+import com.ser.blueline.IDateValue;
 import com.ser.blueline.IDescriptor;
 import com.ser.blueline.IDocument;
 import com.ser.blueline.IDocumentHitList;
 import com.ser.blueline.IDocumentServer;
 import com.ser.blueline.IFulltextEngine;
+import com.ser.blueline.IOrderByExpression;
 import com.ser.blueline.IProperties;
 import com.ser.blueline.IQueryExpression;
 import com.ser.blueline.IQueryOperator;
@@ -100,6 +105,36 @@ public class Suche {
 		}
 		return null;
 	}
+	
+	public List<IDocument> getDocumentsFromPrimaryKeys(List<String> primaryHitList, String primaryKey, int descriptor_Number, String searchClassString) throws NumberFormatException, IOException, BlueLineException{
+		IQueryClass queryClass = myChooseQueryClass(searchClassString);
+		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT);
+		List <IDocument> docList = new ArrayList<IDocument>();
+		
+		
+		for(String hit : primaryHitList){
+			//Primary key nummer vom desc
+			IDescriptor descriptor = getDescriptors(dialog).get( DescriptorMapper.getDescriptorNumber(searchClassString, primaryKey)     );
+
+			IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
+			System.out.println("Hit: '"+hit+"' valueDescriptor:'"+valueDescriptor.getDisplayString()+"'");
+			valueDescriptor.addValue(hit);
+			
+			IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
+			param.setStartDate(null);
+			param.addValueDescriptor(valueDescriptor);
+			System.out.println("Query to execute: "+param.getQueryToExecute());
+			IDocumentHitList hitList = server.query(param, session);
+			for(IDocument act_doc : hitList.getDocuments()){
+				docList.add(act_doc);
+			}
+			
+		}
+		
+		
+		return docList;
+	}
+	
 	public IDocument[] mysearchDocument(String searchclass, String searchword) throws BlueLineException, NumberFormatException, IOException{
 		System.out.println("MY");
 		// DOKUMENTENKLASSE
@@ -152,11 +187,11 @@ public class Suche {
 	}
 	
 	
-public IDocument[] descriptorsearchDocument(int searchclass, String searchword, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws BlueLineException, NumberFormatException, IOException{
+public List<IDocument> descriptorsearchDocument(int searchclass, String searchClassString, String searchword, String descriptor, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws BlueLineException, NumberFormatException, IOException{
 		
-		IQueryClass queryClass = queryClasses[searchclass]; 
-
-
+		/*
+		 * IQueryClass queryClass = queryClasses[searchclass]; 
+		IOrderByExpression a = factory.getOrderByExpressionInstance();
 		// DIALOG UND DESKRIPTOR
 		// suche (Default-) Dialog aus der gewählten Suchklasse
 		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
@@ -180,38 +215,166 @@ public IDocument[] descriptorsearchDocument(int searchclass, String searchword, 
 		// zum Testen
 		param.setHitLimit(1);
 		param.setHitLimitThreshold(1);
+		*/
+		String query = getQuery(firstDate, secondDate, dateState, descriptor, searchword, searchclass);
+		
+		List<String> primaryHitList = server.searchAttributeValues(session, query, true, null, null, 20);
+		for(String a : primaryHitList){
+			System.out.println(a);
+		}
+		List<IDocument> hitList = getDocumentsFromPrimaryKeys(primaryHitList, getPrimaryKey(searchclass), descriptor_Number, searchClassString);
+		//addDateDescriptor(searchclass, firstDate, secondDate, dateState, param);
+
+		return hitList;
+	}
+
+
+	
+	public String getQuery(Date firstDate, Date secondDate, int dateState, String descriptor, String searchword, int searchclass){
+		
+		String expression = getExpression(firstDate, secondDate, dateState, descriptor, searchword, searchclass);
+		String primaryKey = getPrimaryKey(searchclass);
+		String query = "SELECT "+primaryKey+ " FROM DMS WHERE "+expression+";";
+		System.out.println("Die Query ist: "+query);
+		return query;
+	}
+	
+	public String getPrimaryKey(int searchclass){
+		Map<Integer, String> prim_Key = new HashMap<Integer, String>();
+		prim_Key.put(0, "Auftragsnummer");
+		prim_Key.put(1, "Angebotsnummer");
+		prim_Key.put(2, "Typenbezeichnungen");
+		prim_Key.put(3, "Lieferscheinnummer");
+		prim_Key.put(4, "Angebotnummer");
+		prim_Key.put(5, "Rechnungsnummer");
+		prim_Key.put(6, "Anfragedatum");
+		return  prim_Key.get(searchclass);
+	}
+	public String getExpression(Date firstDate, Date secondDate, int dateState, String descriptor, String searchword, int searchclass){
+		String standartExpression ="(" + descriptor + "=" + "'"+searchword+"')";
+		String expression = "";
+		Map<Integer, String> dateType = new HashMap<Integer, String>();
+		dateType.put(0, "Bestelldatum");
+		dateType.put(1, "Angebotsdatum");
+		dateType.put(2, null);
+		dateType.put(3, "Lieferscheindatum");
+		dateType.put(4, "Angebotsdatum");
+		dateType.put(5, "Rechnungsdatum");
+		dateType.put(6, "Anfragedatum");
 		
 		if(firstDate != null && secondDate != null){
 			if(firstDate.getTime() < secondDate.getTime()){
-				param.setStartDate(firstDate);
-				param.setEndDate(secondDate);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(firstDate);
+				String year = Integer.toString((cal.get(Calendar.YEAR)));
+				String month = Integer.toString((cal.get(Calendar.MONTH)+1));
+				String day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
+				System.out.println("Datum: "+year+month+day);
+				if(day.length() < 2){
+					day = "0"+day;
+				}
+				if(month.length() < 2){
+					month = "0"+month;
+				}
+				
+				if(dateType.get(searchclass) != null){
+					String specificDateType = dateType.get(searchclass);
+					String dateValue = year+month+day;
+					expression =" AND (" + specificDateType + ">=" + "'"+dateValue+"')";
+					
+					
+					cal.setTime(firstDate);
+					year = Integer.toString((cal.get(Calendar.YEAR)));
+					month = Integer.toString((cal.get(Calendar.MONTH)+1));
+					day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
+					System.out.println("Datum: "+year+month+day);
+					if(day.length() < 2){
+						day = "0"+day;
+					}
+					if(month.length() < 2){
+						month = "0"+month;
+					}
+					dateValue = year+month+day;
+					expression =expression + " AND (" + specificDateType + "<=" + "'"+dateValue+"')";
+					
+				}else{
+					//TODO RaiseException es gibt kein Datum zu der Suchklasse -> Falsche Suchanfrage
+				}
 			}else{
-				param.setStartDate(secondDate);
-				param.setEndDate(firstDate);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(firstDate);
+				String year = Integer.toString((cal.get(Calendar.YEAR)));
+				String month = Integer.toString((cal.get(Calendar.MONTH)+1));
+				String day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
+				System.out.println("Datum: "+year+month+day);
+				if(day.length() < 2){
+					day = "0"+day;
+				}
+				if(month.length() < 2){
+					month = "0"+month;
+				}
+				
+				if(dateType.get(searchclass) != null){
+					String specificDateType = dateType.get(searchclass);
+					String dateValue = year+month+day;
+					expression =" AND (" + specificDateType + "<=" + "'"+dateValue+"')";
+					
+					
+					cal.setTime(firstDate);
+					year = Integer.toString((cal.get(Calendar.YEAR)));
+					month = Integer.toString((cal.get(Calendar.MONTH)+1));
+					day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
+					System.out.println("Datum: "+year+month+day);
+					if(day.length() < 2){
+						day = "0"+day;
+					}
+					if(month.length() < 2){
+						month = "0"+month;
+					}
+					dateValue = year+month+day;
+					expression =expression + " AND (" + specificDateType + ">=" + "'"+dateValue+"')";
+				}
+					
 			}
 		}
-		if(firstDate != null){
+		else if(firstDate != null){
+			System.out.println("Datestate: "+dateState);
+			if(dateState >= 0){
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(firstDate);
+				String year = Integer.toString((cal.get(Calendar.YEAR)));
+				String month = Integer.toString((cal.get(Calendar.MONTH)+1));
+				String day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
+				System.out.println("Datum: "+year+month+day);
+				if(day.length() < 2){
+					day = "0"+day;
+				}
+				if(month.length() < 2){
+					month = "0"+month;
+				}
+				
+				if(dateType.get(searchclass) != null){
+					String specificDateType = dateType.get(searchclass);
+					String dateValue = year+month+day;
+					expression =" AND (" + specificDateType + "#=" + "'"+dateValue+"')";
+				}else{
+					//TODO RaiseException es gibt kein Datum zu der Suchklasse -> Falsche Suchanfrage
+				}
+			}
+			//bis
 			if(dateState == 0){
-				/*param.addValueDescriptor(getDateDescriptor());
-				IDescriptor datedescriptor = getDescriptors(dialog).get(descriptor_Number);
-				System.out.println(descriptor.getDisplayString(session));
-
-				IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
-				valueDescriptor.addValue(searchword);
-				*/
-				param.setEndDate(firstDate);
+				expression = expression.replace('#', '<');
+			// ab
 			}else if(dateState == 1){
-				param.setStartDate(firstDate);
+				expression = expression.replace('#', '>');
 			}
 			
 		}
-		
-		
-		
-		// Server anfragen und das Ergebnis speichern
-		IDocumentHitList hitList = server.query(param, session);
-		return hitList.getDocumentObjects();
+		System.out.println("Die Expression ist: "+standartExpression + expression);
+		return standartExpression + expression;
 	}
+
 	
 	public int inputStreamInteger() throws NumberFormatException, IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
