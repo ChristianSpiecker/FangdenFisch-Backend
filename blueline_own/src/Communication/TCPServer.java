@@ -27,9 +27,12 @@ public class TCPServer {
 
 			BufferedReader inFromClient = new BufferedReader(
 					new InputStreamReader(connectionSocket.getInputStream()));
+			
+			PrintWriter outPrint = new PrintWriter(connectionSocket.getOutputStream(),true);
 
-			DataOutputStream outToClient = new DataOutputStream(
+			BufferedOutputStream outToClient = new BufferedOutputStream(
 					connectionSocket.getOutputStream());
+			
 			//WARUMMMMMMMMM
 			clientSentence = inFromClient.readLine().replace('+', ' ');
 			
@@ -48,22 +51,34 @@ public class TCPServer {
 				if(res.fileCount() > 0){
 					
 					for(int i=0; i<res.fileCount();i++){
-						System.out.println("Start");
-						//outToClient.writeBytes(res.getFilename(i)+ "\n");
-						//System.out.println("Gesendet: "+res.getFilename(i) + "\n");
-						BufferedInputStream act =res.getFile(i);
-						int read;
-						while ((read= act.read()) != -1) {
-							outToClient.write(read);
-						}
-						outToClient.write(-1);
-						outToClient.flush();
-						System.out.println("\nFertig");
 
+						// Sende den Dateinamen vorraus
+						outPrint.println(res.getFilename(i));
+						
+						// Erzeuge DataInputStream aus dem InputStream
+						DataInputStream dis = new DataInputStream(res.getFile(i));
+						// Erzeuge byte[] aus dem DataInputStream
+						byte[] buffer = getBytes(dis);
+						
+						// Die Bytegroeße der Datei vorraus senden
+						outPrint.println(buffer.length);
+						
+						// Sende die Bytes der Datei
+						outToClient.write(buffer);
+						
+						// FLUUUSSSSSHHH
+						outPrint.flush();
+						outToClient.flush();
+						
+						
+						System.out.println("######## Gesendet");
+						System.out.println("Dateiname: " + res.getFilename(i));
+						System.out.println("Dateigroesse: " + buffer.length);
 					}
+
 				}else{
 					//kein File gefunden
-					outToClient.writeBytes("NoFile\n");
+					//outToClient.writeBytes("NoFile\n");
 					System.out.println("Gesendet: Es wurde leider kein Fisch gefangen\n");
 				}
 				
@@ -74,6 +89,25 @@ public class TCPServer {
 		}
 	}
 	
+	public static byte[] getBytes(InputStream is) throws IOException {
+
+	    int len;
+	    int size = 1024;
+	    byte[] buf;
+
+	    if (is instanceof ByteArrayInputStream) {
+	      size = is.available();
+	      buf = new byte[size];
+	      len = is.read(buf, 0, size);
+	    } else {
+	      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	      buf = new byte[size];
+	      while ((len = is.read(buf, 0, size)) != -1)
+	        bos.write(buf, 0, len);
+	      buf = bos.toByteArray();
+	    }
+	    return buf;
+	  }
 
 	
 	public static void bluelinestuff() throws NumberFormatException, BlueLineException, IOException{

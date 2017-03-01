@@ -104,9 +104,8 @@ public class Controller {
 			filename = normalizeFilename(filename);
 			
 			// File im Resultobjekt adden
-			BufferedInputStream bis = new BufferedInputStream(inputStream);
 			
-			Result.getInstance().addFile(bis, filename);
+			Result.getInstance().addFile(inputStream, filename);
 		}
 		return documents;
 	}
@@ -162,9 +161,9 @@ public class Controller {
 			
 
 
-			BufferedInputStream bis = new BufferedInputStream(inputStream);
 			
-			Result.getInstance().addFile(bis, filename);
+			
+			Result.getInstance().addFile(inputStream, filename);
 			
 			
 			

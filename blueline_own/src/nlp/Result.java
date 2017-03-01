@@ -30,7 +30,7 @@ public class Result {
 	ArrayList<String> searchword = new ArrayList<>();
 	ArrayList<String> searchclass = new ArrayList<>();
 	ArrayList<String> descriptor = new ArrayList<>();
-	ArrayList<BufferedInputStream> files = new ArrayList<>();
+	ArrayList<InputStream> files = new ArrayList<>();
 	ArrayList<String> filenames = new ArrayList<>();
 	String tree = null;
 	ArrayList<Date> date = new ArrayList<>();
@@ -128,14 +128,14 @@ public class Result {
 		this.tree = tree;
 	}
 	
-	public void addFile(BufferedInputStream stream, String filename){
+	public void addFile(InputStream stream, String filename){
 		files.add(stream);
 		filenames.add(filename);
 	}
 	public int fileCount(){
 		return files.size();
 	}
-	public BufferedInputStream getFile(int i){
+	public InputStream getFile(int i){
 		if(i >= 0 && i < files.size()){
 			return files.get(i);
 		}
