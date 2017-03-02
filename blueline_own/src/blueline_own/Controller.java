@@ -1,41 +1,22 @@
 package blueline_own;
-import com.ser.blueline.metaDataComponents.IQueryClass;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.apache.commons.lang.ArrayUtils;
-
 import com.ser.blueline.BlueLineException;
 import com.ser.blueline.IDocument;
 import com.ser.blueline.IDocumentPart;
-import com.ser.blueline.IDocumentServer;
 import com.ser.blueline.IRepresentation;
-import com.ser.blueline.ISerClassFactory;
 import com.ser.blueline.ISession;
-import com.ser.blueline.MetaDataException;
-import com.ser.blueline.metaDataComponents.IDialog;
-import com.ser.blueline.metaDataComponents.IQueryClass;
-import com.ser.blueline.metaDataComponents.IQueryDlg;
-
 import nlp.Result;
-import nlp.SimpleGermanExample;
 
 public class Controller {
 	Anmeldung meine_anmeldung;
 	ISession session;
 	
+	// Singleton
 	private static Controller instance;
 	public static Controller getInstance () throws IOException, BlueLineException {
 		    if (Controller.instance == null) {
@@ -57,7 +38,11 @@ public class Controller {
 	public ISession getSession(){
 		return session;
 	}
-	
+	/**
+	 * Meldet sich neu an und erstellt die Session
+	 * @throws IOException
+	 * @throws BlueLineException
+	 */
 	public void updateSession() throws IOException, BlueLineException{
 		this.meine_anmeldung = new Anmeldung();
 		meine_anmeldung.initFramework();	
@@ -65,37 +50,23 @@ public class Controller {
 		this.session = meine_anmeldung.login("Supervisor", "Supervisor", "km4");
 	}
 	
-	
+	/**
+	 * Ausloggen
+	 * @throws BlueLineException
+	 */
 	public void logout() throws BlueLineException{
 		// Benutzer abmelden + Verbindung von Dokumentenserver trennen
 		meine_anmeldung.logout(session);
 		meine_anmeldung.close();
 	}
-	public void search() throws NumberFormatException, BlueLineException, IOException{
-		//Search Document
-		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
-		IDocument[] documents = suche.searchDocument();
-		System.out.println(documents.length);
-		for(IDocument document : documents){
-			System.out.println("DOKUMENT GEFUNDEN");
-			// alle Repraesentationen dieses Dokuments abrufen
-			IRepresentation[] representationList = document.getRepresentationList();
-			int representationNr = document.getDefaultRepresentation();
-					
-			// aus der Repraesentationsliste auslesen
-			IRepresentation defaultRepresentation = representationList[representationNr];
-					
-			// erstes Teildokument der Repraesentation herunterladen
-			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
-					
-			// was soll gelesen werden?
-			InputStream inputStream = documentPart.getRawDataAsStream();
-				
-			//saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
-		}
-	}
-	public List<IDocument> fulltextSearch(String searchword) throws BlueLineException, NumberFormatException, IOException{
-		
+	/**
+	 * Volltextsuche - Sucht mit einem Suchwort Dokumente und fügt sie dem Resultobjekt hinzu
+	 * @param searchword Suchwort der Volltextsuche
+	 * @throws BlueLineException
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
+	public void fulltextSearch(String searchword) throws BlueLineException, NumberFormatException, IOException{
 		
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
 		List<IDocument> documents = suche.fulltextSearch(searchword);
@@ -117,14 +88,20 @@ public class Controller {
 			filename = normalizeFilename(filename);
 			
 			// File im Resultobjekt adden
-			
 			Result.getInstance().addFile(inputStream, filename);
 		}
-		return documents;
 	}
 	
-	
-	public List<IDocument> searchclassSearchwordSearch(String searchclass, int searchClass_Number, String searchword) throws BlueLineException, NumberFormatException, IOException{
+	/**
+	 * Sucht mithilfe von Suchklasse und einem Suchwort Dokumente und fügt sie dem Resultobjekt hinzu
+	 * @param searchclass Suchklasse
+	 * @param searchClass_Number Integer-Representation der Suchklasse
+	 * @param searchword Suchwort
+	 * @throws BlueLineException
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
+	public void searchclassSearchwordSearch(String searchclass, int searchClass_Number, String searchword) throws BlueLineException, NumberFormatException, IOException{
 		
 		
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
@@ -150,9 +127,16 @@ public class Controller {
 			
 			Result.getInstance().addFile(inputStream, filename);
 		}
-		return documents;
 	}
-public List<IDocument> searchClassSearch(String searchClass) throws BlueLineException, NumberFormatException, IOException{
+	
+/**
+ * Sucht mithilfe von Suchklasse Dokumente und fügt sie dem Resultobjekt hinzu
+ * @param searchClass Suchklasse
+ * @throws BlueLineException
+ * @throws NumberFormatException
+ * @throws IOException
+ */
+public void searchClassSearch(String searchClass) throws BlueLineException, NumberFormatException, IOException{
 		
 		
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
@@ -175,40 +159,24 @@ public List<IDocument> searchClassSearch(String searchClass) throws BlueLineExce
 			filename = normalizeFilename(filename);
 			
 			// File im Resultobjekt adden
-			
 			Result.getInstance().addFile(inputStream, filename);
 		}
-		return documents;
 	}
 	
-	
-	
-	public void mysearch(String searchclass, String searchword) throws NumberFormatException, BlueLineException, IOException{
-		//Search Document
-		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
-		
-		IDocument[] documents = suche.mysearchDocument(searchclass, searchword);
-		
-		for(IDocument document : documents){
-			System.out.println("DOKUMENT GEFUNDEN");
-			// alle Repraesentationen dieses Dokuments abrufen
-			IRepresentation[] representationList = document.getRepresentationList();
-			int representationNr = document.getDefaultRepresentation();
-					
-			// aus der Repraesentationsliste auslesen
-			IRepresentation defaultRepresentation = representationList[representationNr];
-					
-			// erstes Teildokument der Repraesentation herunterladen
-			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
-					
-			// was soll gelesen werden?
-			InputStream inputStream = documentPart.getRawDataAsStream();
-			System.out.println("gesplittet");
-				
-			//saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
-		}
-	}
-	
+	/**
+	 *  Sucht mithilfe von Suchklasse, Deskriptor und Suchwort Dokumente und fügt sie dem Resultobjekt hinzu
+	 * @param searchclass Integer-Representation der Suchklasse
+	 * @param searchClassString Suchklasse
+	 * @param searchword Suchwort
+	 * @param descriptor Deskriptor 
+	 * @param descriptor_Number Integer-Representation des Deskriptors
+	 * @param firstDate Erstes Datum
+	 * @param secondDate Zweites Datum
+	 * @param dateState Datumszustand(1 == vor, 0 == nach, -1 == Kein Datum)
+	 * @throws NumberFormatException
+	 * @throws BlueLineException
+	 * @throws IOException
+	 */
 	public void descriptorsearch(int searchclass,String  searchClassString, String searchword, String descriptor, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws NumberFormatException, BlueLineException, IOException{
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
 		
@@ -232,18 +200,15 @@ public List<IDocument> searchClassSearch(String searchClass) throws BlueLineExce
 			filename = normalizeFilename(filename);
 			// File im Resultobjekt adden
 			
-
-
-			
-			
 			Result.getInstance().addFile(inputStream, filename);
 			
-			
-			
-			//saveDocuments(inputStream, filename);
 		}
 	}
-
+	/**
+	 * entfernt ungewollte Zeichen aus dem Dateinamen
+	 * @param f Dateiname
+	 * @return veränderter Dateiname
+	 */
 	public String normalizeFilename(String f){
 		char[] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
 		
@@ -266,24 +231,6 @@ public List<IDocument> searchClassSearch(String searchClass) throws BlueLineExce
 		
 		f = Normalizer.normalize(f, Normalizer.Form.NFKC);
 		return f;
-	}
-
-	private static void saveDocuments(InputStream inputStream, String docName) throws IOException{
-
-		// wohin soll geschrieben werden?
-		File file = new File(docName);
-		System.out.println(docName);
-		file.createNewFile();
-		FileOutputStream writer = new FileOutputStream(file);
-		// auf Festplatte schreiben
-		int read;
-		while ((read=inputStream.read()) != -1) {
-			writer.write(read);
-		}
-		
-		// alle Streams schliessen
-		inputStream.close();
-		writer.close();
 	}
 
 }

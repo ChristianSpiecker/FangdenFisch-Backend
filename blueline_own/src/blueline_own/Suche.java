@@ -9,25 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import com.ser.blueline.BlueLineException;
-import com.ser.blueline.IDateValue;
 import com.ser.blueline.IDescriptor;
 import com.ser.blueline.IDocument;
 import com.ser.blueline.IDocumentHitList;
 import com.ser.blueline.IDocumentServer;
-import com.ser.blueline.IFulltextEngine;
-import com.ser.blueline.IOrderByExpression;
-import com.ser.blueline.IProperties;
-import com.ser.blueline.IQueryExpression;
-import com.ser.blueline.IQueryOperator;
 import com.ser.blueline.IQueryParameter;
-import com.ser.blueline.IQueryValueDescriptor;
 import com.ser.blueline.ISerClassFactory;
 import com.ser.blueline.ISession;
-import com.ser.blueline.ISystem;
-import com.ser.blueline.ITicket;
 import com.ser.blueline.IValueDescriptor;
 import com.ser.blueline.MetaDataException;
 import com.ser.blueline.metaDataComponents.IComponent;
@@ -37,8 +26,6 @@ import com.ser.blueline.metaDataComponents.IDialog;
 import com.ser.blueline.metaDataComponents.IMaskedEdit;
 import com.ser.blueline.metaDataComponents.IQueryClass;
 import com.ser.blueline.metaDataComponents.IQueryDlg;
-import com.ser.sedna.client.bluelineimpl.SEDNABluelineAdapterFactory;
-
 import nlp.DescriptorMapper;
 import nlp.SearchClassMapper;
 
@@ -55,42 +42,13 @@ public class Suche {
 		// holt sich alle Suchklassen vom Server
 		this.queryClasses = server.getQueryClasses(session);
 	}
-	
-	public IDocument[] searchDocument() throws BlueLineException, NumberFormatException, IOException{
-		// DOKUMENTENKLASSE
-		System.out.println("Dokumentenklasse auswaehlen!");
-		IQueryClass queryClass = chooseQueryClass();
-		
-		// DIALOG UND DESKRIPTOR
-		// suche (Default-) Dialog aus der gewÃ¤hlten Suchklasse
-
-		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
-		// wÃ¤hle daraus einen passenden Deskriptor aus
-		IDescriptor descriptor = chooseDescriptor(dialog);
-		
-		// IValueDescriptor generieren
-		IValueDescriptor valueDescriptor = factory.getValueDescriptorInstance(descriptor);
-		// Suchanfrage anfuegen
-
-		String anfrage = inputStreamString();
-		
-		valueDescriptor.addValue(anfrage);
-
-		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
-		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
-		param.setStartDate(null);
-		param.addValueDescriptor(valueDescriptor);
-		
-		//param.setOrderByExpression(arg0);
-		System.out.println(param.getQueryToExecute());
-
-		//param.setExpression(factory.getExpressionInstance("SELECT Kundennummer FROM DMS WHERE (Kundennummer = '4567891');"));
-
-		IDocumentHitList hitList = server.query(param, session);
-
-		return hitList.getDocumentObjects();
-	}
-	
+	/**
+	 * Führt eine Query aus
+	 * @param session aktuelle Session
+	 * @param queryParameter 
+	 * @return Ergebnisse der Query
+	 * @throws BlueLineException
+	 */
 	 public IDocumentHitList executeQuery(ISession session, IQueryParameter queryParameter)
 	            throws BlueLineException
 	    {
@@ -99,13 +57,17 @@ public class Suche {
 	    }
 	
 
-	private IQueryClass getQueryClass(String searchclass){
-		for(IQueryClass queryClass : queryClasses){
-			if (searchclass.equals(queryClass))return queryClass;
-		}
-		return null;
-	}
-	
+	/**
+	 *  Holt sich die Dokumente zu den gegebnen "Primärschlüsseln"
+	 * @param primaryHitList
+	 * @param primaryKey
+	 * @param descriptor_Number
+	 * @param searchClassString
+	 * @return Liste der Ergebnisse
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 * @throws BlueLineException
+	 */
 	public List<IDocument> getDocumentsFromPrimaryKeys(List<String> primaryHitList, String primaryKey, int descriptor_Number, String searchClassString) throws NumberFormatException, IOException, BlueLineException{
 		IQueryClass queryClass = myChooseQueryClass(searchClassString);
 		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT);
@@ -135,57 +97,14 @@ public class Suche {
 		return docList;
 	}
 	
-	public IDocument[] mysearchDocument(String searchclass, String searchword) throws BlueLineException, NumberFormatException, IOException{
-		System.out.println("MY");
-		// DOKUMENTENKLASSE
-		System.out.println("Dokumentenklasse auswaehlen!");
-		
-		// Hole die Richtige Suchklasse
-		IQueryClass queryClass = myChooseQueryClass(searchclass); 
-		
-		
-		
-		
-		// DIALOG UND DESKRIPTOR
-		// suche (Default-) Dialog aus der gewÃ¤hlten Suchklasse
-		IQueryDlg dialog = queryClass.getQueryDlg(IDialog.TYPE_DEFAULT); 
-		// wÃ¤hle daraus einen passenden Deskriptor aus
-
-		// alle deskriptoren 
-		ArrayList<IDescriptor>descriptors = getDescriptors(dialog);
-		// IValueDescriptorlist
-		ArrayList<IValueDescriptor> valuedescriptors = new ArrayList<IValueDescriptor>();
-		
-		// alle IValueDescriptor generieren
-		for(IDescriptor descr : descriptors){
-			valuedescriptors.add(factory.getValueDescriptorInstance(descr));
-		} 
-		
-		// Suchanfrage anfuegen
-		//System.out.println(descriptor.getName() + ": ");
-		//String anfrage = inputStreamString();
-		
-		// Jedem Valuedescriptor das suchwort adden
-		/*for(IValueDescriptor descr : valuedescriptors){
-			descr.addValue(searchword);
-		}*/ 
-		//cheeese
-		valuedescriptors.get(9).addValue(searchword);
-		
-		// Such-Parameter zusammenbasteln MEHRERE MOEGLICH
-		IQueryParameter param = factory.getQueryParameterInstance(session, dialog);
-		
-		// alle ValueDescriptors adden
-		/*for(IValueDescriptor descr : valuedescriptors){
-			param.addValueDescriptor(descr);
-		}*/ 
-		param.addValueDescriptor(valuedescriptors.get(9));
-
-		// Server anfragen und das Ergebnis speichern
-		IDocumentHitList hitList = server.query(param, session);
-		return hitList.getDocumentObjects();
-	}
-
+/**
+ *  Sucht Dokumente mithilfe eine Suchwortes Volltext
+ * @param searchword
+ * @return Liste der Dokumente
+ * @throws BlueLineException
+ * @throws NumberFormatException
+ * @throws IOException
+ */
 public List<IDocument> fulltextSearch(String searchword) throws BlueLineException, NumberFormatException, IOException{
 		
 	// Suchklasse mit Deskriptor mit Fulltextunterstuetzung
@@ -218,6 +137,16 @@ public List<IDocument> fulltextSearch(String searchword) throws BlueLineExceptio
 		return documents;
 	}
 
+/**
+ *  Sucht Dokumente mithilfe eines Suchwortes und einer Suchklasse -  Alle Deskriptoren der SUchklasse werden verodert und mit dem Suchwort verglichen.
+ * @param searchclass
+ * @param searchClass_Number
+ * @param searchword
+ * @return Liste der Dokumente
+ * @throws BlueLineException
+ * @throws NumberFormatException
+ * @throws IOException
+ */
 	public List<IDocument> searchclassSearchwordSearch(String searchclass, int searchClass_Number, String searchword) throws BlueLineException, NumberFormatException, IOException{
 	
 	IQueryClass queryClass = queryClasses[searchClass_Number]; 
@@ -231,7 +160,11 @@ public List<IDocument> fulltextSearch(String searchword) throws BlueLineExceptio
 		// Wenn der Typ des Descriptors ein String ist. 1 ist Datum
 		if(descriptor.getType() == 10){
 			// zusammengesetze Deskriptoren müssen mit Unterstrichen verbunden werden
-			expression += " ("+descriptor.getName().replace(' ', '_')+"='"+ searchword +"') OR";
+			String desc = descriptor.getName().replace(' ', '_');
+			if(desc.equals("Auftragsnummer_Kunde")){
+				desc = "Rechnungsadresse";
+			}
+			expression += " ("+desc+"='"+ searchword +"') OR";
 		}
 		
 	}
@@ -255,7 +188,14 @@ public List<IDocument> fulltextSearch(String searchword) throws BlueLineExceptio
 
 	return hitList;
 	}
-
+/**
+ * Sucht mithilfe einer Suchklasse Dokumente 
+ * @param searchclass
+ * @return Liste der Ergebnisse
+ * @throws BlueLineException
+ * @throws NumberFormatException
+ * @throws IOException
+ */
 public List<IDocument> searchClassSearch(String searchclass) throws BlueLineException, NumberFormatException, IOException{
 	
 	
@@ -263,6 +203,7 @@ public List<IDocument> searchClassSearch(String searchclass) throws BlueLineExce
 	String primaryKey = getPrimaryKey(getSearchClassNumber(searchclass));
 	String expression = "";
 	if(primaryKey.equals("Anfragedatum1")){
+		// Wenn es sich um ein Datum handelt
 		expression += "("+primaryKey+">'10000101')";
 	}else{
 		expression += "("+primaryKey+" LIKE '*')";
@@ -283,7 +224,21 @@ public List<IDocument> searchClassSearch(String searchclass) throws BlueLineExce
 	return hitList;
 	}
 
-	
+	/**
+	 *  Sucht mithilfe eines Deskriptors, eines Suchwortes und einer Suchklasse Dokumente.
+	 * @param searchclass Suchklassennummer
+	 * @param searchClassString Suchklassenname
+	 * @param searchword Suchwort 
+	 * @param descriptor Deskriptor
+	 * @param descriptor_Number Deskriptornummer
+	 * @param firstDate erstes Datum
+	 * @param secondDate zweites Datum
+	 * @param dateState Datumszustand
+	 * @return Liste der Ergebnisse
+	 * @throws BlueLineException
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 public List<IDocument> descriptorsearchDocument(int searchclass, String searchClassString, String searchword, String descriptor, int descriptor_Number, Date firstDate, Date secondDate, int dateState) throws BlueLineException, NumberFormatException, IOException{
 		
 		/*
@@ -325,17 +280,20 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 		return hitList;
 	}
 
-
-	
+/**
+ * Erstellt eine Query.
+ */
 	public String getQuery(Date firstDate, Date secondDate, int dateState, String descriptor, String searchword, int searchclass){
 		
 		String expression = getExpression(firstDate, secondDate, dateState, descriptor, searchword, searchclass);
 		String primaryKey = getPrimaryKey(searchclass);
-		String query = "SELECT "+primaryKey+ " FROM DMS WHERE "+expression+";";
+		String query = "SELECT DISTINCT "+primaryKey+ " FROM DMS WHERE "+expression+";";
 		System.out.println("Die Query ist: "+query);
 		return query;
 	}
-	
+	/**
+	 * Holt den "Primärschlüssel" zu der gegebenen Suchklsase
+	 */
 	public String getPrimaryKey(int searchclass){
 		Map<Integer, String> prim_Key = new HashMap<Integer, String>();
 		prim_Key.put(0, "Auftragsnummer");
@@ -345,9 +303,13 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 		prim_Key.put(4, "Angebotnummer");
 		prim_Key.put(5, "Rechnungsnummer");
 		prim_Key.put(6, "Anfragedatum1");
+		
+		
 		return  prim_Key.get(searchclass);
 	}
-
+/**
+ * Erstellt eine Expression die in einer Query hinter dem "WHERE" kommen sollte
+ */
 	public String getExpression(Date firstDate, Date secondDate, int dateState, String descriptor, String searchword, int searchclass){
 		String standartExpression ="(" + descriptor + "=" + "'"+searchword+"')";
 		String expression = "";
@@ -359,8 +321,9 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 		dateType.put(4, "Angebotsdatum");
 		dateType.put(5, "Rechnungsdatum");
 		dateType.put(6, "Anfragedatum1");
-		
+		// zwei Daten gegeben
 		if(firstDate != null && secondDate != null){
+
 			if(firstDate.getTime() < secondDate.getTime()){
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(firstDate);
@@ -381,7 +344,7 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 					expression =" AND (" + specificDateType + ">=" + "'"+dateValue+"')";
 					
 					
-					cal.setTime(firstDate);
+					cal.setTime(secondDate);
 					year = Integer.toString((cal.get(Calendar.YEAR)));
 					month = Integer.toString((cal.get(Calendar.MONTH)+1));
 					day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
@@ -418,7 +381,7 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 					expression =" AND (" + specificDateType + "<=" + "'"+dateValue+"')";
 					
 					
-					cal.setTime(firstDate);
+					cal.setTime(secondDate);
 					year = Integer.toString((cal.get(Calendar.YEAR)));
 					month = Integer.toString((cal.get(Calendar.MONTH)+1));
 					day = Integer.toString((cal.get(Calendar.DAY_OF_MONTH)));
@@ -434,7 +397,7 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 				}
 					
 			}
-		}
+		} // Nur ein Datum gegeben
 		else if(firstDate != null){
 			System.out.println("Datestate: "+dateState);
 			if(dateState >= 0){
@@ -474,25 +437,6 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 	}
 
 	
-	public int inputStreamInteger() throws NumberFormatException, IOException{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		return Integer.parseInt(reader.readLine());
-	}
-	
-	public String inputStreamString() throws NumberFormatException, IOException{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		return reader.readLine();
-	}
-	
-	public IQueryClass chooseQueryClass() throws MetaDataException, NumberFormatException, IOException {
-		// auswahl der Klassen ausgeben
-		int i = 0;
-		for(IQueryClass queryClass : queryClasses){
-			System.out.println(i + ": " + queryClass);
-			i++;
-		}
-		return queryClasses[inputStreamInteger()]; 
-	}
 	public IQueryClass myChooseQueryClass(String searchclass) throws MetaDataException, NumberFormatException, IOException {
 		// auswahl der Klassen ausgeben
 		int i = SearchClassMapper.getSearchClassNumber(searchclass);
@@ -502,6 +446,7 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 		return queryClasses[i]; 
 	}
 	
+	@SuppressWarnings("null")
 	public int getSearchClassNumber(String searchclass) throws MetaDataException, NumberFormatException, IOException {
 		int i = SearchClassMapper.getSearchClassNumber(searchclass);
 		if (i == -1){
@@ -509,23 +454,9 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 		}		
 		return i; 
 	}
-	
-	public IDescriptor chooseDescriptor(IQueryDlg dialog) throws BlueLineException, NumberFormatException, IOException{
-		ArrayList<IDescriptor>descriptors = getDescriptors(dialog);
-		int i = 0;
-		for(IDescriptor descriptor : descriptors){
-			System.out.println(i + ": " + descriptor.getName());
-			i++;
-		}
-
-		// Benutzer darf einen Deskriptor auswÃ¤hlen...
-		int number = inputStreamInteger();
-		return descriptors.get(number);
-	}
-	
-	 
-
-	
+	/**
+	 * Holt alle Deskriptoren zu einem Dialog
+	 */
 	public ArrayList<IDescriptor> getDescriptors(IQueryDlg dialog) throws BlueLineException{
 		// alle Komponenten dieses Eingabe-Dialoges zwischenspeichern
 		IComponent[] components = dialog.getComponents();
@@ -564,16 +495,5 @@ public List<IDocument> descriptorsearchDocument(int searchclass, String searchCl
 	
  	public IQueryClass[] getDocumentClasses(){
 		return this.queryClasses;
-	}
-	
-	public IQueryClass getDocumentClassByName(String name){
-		// auswahl der Klassen ausgeben
-		int i = 0;
-		for(IQueryClass queryClass : queryClasses){
-			if(queryClass.getName() == name){
-				return queryClass;
-			}
-		}
-		return null;
 	}
 }

@@ -120,9 +120,9 @@ public class DescriptorMapper {
 			put("Hundenamen",0);	
 			put("Lieferadresse",1);
 			put("Lieferadressen",1);
-			put("Auftragsnummer Kunde",2);
+			put("Auftragsnummer",2);
 			put("Auftragsnummer Kunden",2);	
-			put("Auftragsnummern Kunde",2);
+			put("Auftragsnummern",2);
 			put("Auftragsnummern Kunden",2);
 			put("Kundenauftragsnummer",2);
 			put("Kundenauftragsnummern",2);	
@@ -141,9 +141,9 @@ public class DescriptorMapper {
 			put("Hundenamen",0);	
 			put("Lieferadresse",1);
 			put("Lieferadressen",1);
-			put("Auftragsnummer Kunde",2);
+			put("Auftragsnummer",2);
 			put("Auftragsnummer Kunden",2);	
-			put("Auftragsnummern Kunde",2);
+			put("Auftragsnummern",2);
 			put("Auftragsnummern Kunden",2);
 			put("Kundenauftragsnummer",2);
 			put("Kundenauftragsnummern",2);	
@@ -309,7 +309,7 @@ public class DescriptorMapper {
 			put("01", "Bestelldatum");
 			put("02", "Angebotsnummer");
 			put("03", "Auftragsnummer");
-			put("10", "Auftragsnummer Kunde");
+			put("10", "Rechnungsadresse");
 			put("11", "Kundenname");
 			put("12", "Angebotsdatum");
 			put("13", "Angebotsnummer");
@@ -317,7 +317,7 @@ public class DescriptorMapper {
 			put("21", "Typenbezeichnungen");
 			put("30", "Kundenname");
 			put("31", "Lieferadresse");
-			put("32", "Auftragsnummer Kunde");
+			put("32", "Rechnungsadresse");
 			put("33", "Artikelnummer");
 			put("34", "Lieferscheindatum");
 			put("35", "Lieferscheinnummer");
@@ -328,8 +328,8 @@ public class DescriptorMapper {
 			put("51", "Angebotsdatum");
 			put("52", "Auftragsnummer");
 			put("53", "Bestelldatum");
-			put("54", "Gesamtpreis Brutto");
-			put("55", "Gesamtpreis Netto");
+			put("54", "Gesamtpreis_Brutto");
+			put("55", "Gesamtpreis_Netto");
 			put("56", "Kundennummer");
 			put("57", "Rechnungsdatum");
 			put("58", "Rechnungsnummer");
@@ -340,6 +340,12 @@ public class DescriptorMapper {
 			put("62", "Anfragedatum1");
 
 	}};
+	/**
+	 *  Überprüft ob die gegebene Suchklasse den gegeben Deskriptor enthält.
+	 * @param searchClass Suchklassenname
+	 * @param word Deskriptorname
+	 * @return Deskriptornummer oder -1 falls er ungültig war
+	 */
 	public static int getDescriptorNumber(String searchClass, String word){
 		if (descriptorMap.get(searchClass) == null){
 			return -1;
@@ -352,6 +358,12 @@ public class DescriptorMapper {
 		
 		return descriptorMap.get(searchClass).get(word);
 	}
+	/**
+	 * Zu gegebener Suchklassennummer und Deskriptornummer wird der Deskriptorname zurückgegeben
+	 * @param descriptor descriptornummer
+	 * @param searchclass Suchklassennummer
+	 * @return Deskriptorname oder "Error"
+	 */
 	public static String getDescriptorName(int descriptor, int searchclass){
 		String key = Integer.toString(searchclass)+Integer.toString(descriptor);
 		System.out.println(key);

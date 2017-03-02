@@ -40,56 +40,13 @@ public class SimpleGermanExample {
 		    return SimpleGermanExample.instance;
 	 }
 	
-	 
-    public String analyseText(String sampleGermanText) {
-    	String result = null;
-        Annotation germanAnnotation = new Annotation(sampleGermanText);
-       
-        pipeline.annotate(germanAnnotation);
-        
-        for (CoreMap sentence : germanAnnotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-            Tree sentenceTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-            result = sentenceTree.toString();
-            
-            pipeline.getConstituentTreePrinter().printTree(sentenceTree);
-            
-            // http://stanfordnlp.github.io/CoreNLP/api.html
-            for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-                // this is the text of the token
-                String word = token.get(TextAnnotation.class);
-                // this is the POS tag of the token
-                String pos = token.get(PartOfSpeechAnnotation.class);
-                // this is the NER label of the token
-                String ne = token.get(NamedEntityTagAnnotation.class);
-                System.out.println(word + pos + ne);
-            }
-        }
-        
-        return result;
-    }
     
-    // Interpretiert auf Englisch. Nicht nutzen.
-    public String analyseTextNew(String sampleGermanText) {
-    	String result = null;
-        Annotation germanAnnotation = new Annotation(sampleGermanText);
-        
-        pipeline.annotate(germanAnnotation);
-        
-        Document doc = new Document(sampleGermanText);
-        for (Sentence sent : doc.sentences()) {
-            
-            result = sent.parse().toString();
-        }
-        
-        return result;
-    }
-    
-    
-    
-    
+    /**
+     * Erstellt den Baum zu dem Eingegebenen String
+     * @param sampleGermanText Der zu analysierende Satz
+     */
     public void myanalyseText(String sampleGermanText) {
     	
-    	Map<String, String> keywords = new HashMap<String, String>();
     	Tree sentenceTree = null;
     	String result = null;
         Annotation germanAnnotation = new Annotation(sampleGermanText);
@@ -110,10 +67,6 @@ public class SimpleGermanExample {
                 String pos = token.get(PartOfSpeechAnnotation.class);
                 // this is the NER label of the token
                 String ne = token.get(NamedEntityTagAnnotation.class);
-                //System.out.println("w:"+word + " p:"+pos +" n:"+ ne);
-                if(pos.equals("NE") || pos.equals("NN")){
-                	keywords.put(word, pos);
-                }
                 
             }
         }
@@ -121,26 +74,19 @@ public class SimpleGermanExample {
         handleTree(sentenceTree);
         
         Result.getInstance().addTree(result);
-        /*
-        for (Entry<String, String> entry : keywords.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value.equals("NE")){
-            	res.setSearchword(key);
-            }
-            if (value.equals("NN")){
-            	res.setsearchclass(key);
-            }
-        	
-        }
-        res.addTree(result);
-        */
     }
-    
+    /**
+     * Traversiert durch den Baum und fügt erhaltene Informationen in das Resultobjekt
+     * @param tree Der Baum
+     */
     private void handleTree(Tree tree){
     	traverse(tree);
     }
-    
+
+    /**
+     * Überprüft Datum und Zahl und fügt sie zum Resultobjekt hinzu
+     * @param card Teilbaum ab CARD
+     */
     private void checkCARD(Tree card){
     	Tree children [] = card.children();
     	for(int i=0; i < children.length; i++){
@@ -148,8 +94,15 @@ public class SimpleGermanExample {
 	    	if (children[i].nodeString().startsWith("CARD")){
 	
 				String date =children[i].firstChild().nodeString();
-				System.out.println("Datum geaddet: " + date);
-				Result.getInstance().addDate(date);
+				if(date.contains(".")){
+					Result.getInstance().addDate(date);
+				}else if(date.contains("-")){
+					Result.getInstance().setSearchword(date);
+				}else{
+					Result.getInstance().setSearchword(date);
+				}
+				
+
 				// Überprüft ob ab oder bis zu dem Datum gesucht werden soll
 	    	} else if (children[i].nodeString().equals("APPR")){
 	    		String temp_preposition = children[i].firstChild().nodeString();
@@ -158,21 +111,27 @@ public class SimpleGermanExample {
 	    	}
     	}
     }
+    /**
+     * Überprüft Suchwörter und Descriptoren und fügt sie zum Resultobjekt hinzu
+     * @param pp Teilbaum ab PP
+     */
     private void checkPPinNP(Tree pp){
     	Tree children [] = pp.children();
     	for(int i=0; i < children.length; i++){
+    		// Nomen
 			if (children[i].nodeString().startsWith("NN")){
 				// NP PP NN Deskriptor
 				String descriptor =children[i].firstChild().nodeString();
 				System.out.println("descriptor geaddet: " + descriptor);
 				Result.getInstance().setdescriptor(descriptor);
+				//Eigenname
 			}else if (children[i].nodeString().startsWith("NE")){
 				// NP PP NE
 				String searchword = children[i].firstChild().nodeString();
 				System.out.println("Suchwort geaddet: " + searchword);
 				Result.getInstance().setSearchword(searchword);
 
-				
+				// Zusamengesetzter Eigenname bsp. Rheinwerk Group
 			} else if (children[i].nodeString().startsWith("MPN")){
 				// NP PP NE
 				String erstesNE = children[i].getChild(0).toString().split(" ")[1];
@@ -181,7 +140,7 @@ public class SimpleGermanExample {
 				System.out.println("Suchwort geaddet: " + searchword);
 				Result.getInstance().setSearchword(searchword);
 
-				
+				// Eigennnamenkombination - ungenutzt
 			} else if (children[i].nodeString().startsWith("CNP")){
 				// NP PP CNP
 				Tree cnp []= children[i].children();
@@ -199,6 +158,11 @@ public class SimpleGermanExample {
 		}
     	
     }
+    /**
+     * Überprüft Suchklsase und fügt sie zum Resultobjekt hinzu
+     * Ruft ggf. die PPinNP Überprüfung auf
+     * @param np teilbaum ab NP
+     */
     private void checkNP(Tree np){
     	Tree children [] = np.children();
     	for(int i=0; i < children.length; i++){
@@ -216,7 +180,11 @@ public class SimpleGermanExample {
     	
     	
     }
-    //PP außerhalb von NP
+
+    /**
+     * Überprüft PP's außerhalb von NP's
+     * @param pp Teilbaum ab pp
+     */
     private void checkPP(Tree pp){
     	Tree children [] = pp.children();
     	for(int i=0; i < children.length; i++){
@@ -233,9 +201,10 @@ public class SimpleGermanExample {
 				System.out.println("Suchwort geaddet: " + searchword);
 				Result.getInstance().setSearchword(searchword);
 				
+			// ADJA ist eine ortsbezogene Angabe und bezieht sich immer auf ein darauffolgendes Nomen 
+			//somit ist i+1 niemals außerhalb des Baumes | Beispiel: Frankfurter Zoo, Bremer Warenhaus
 			}else if(children[i].nodeString().startsWith("ADJA")){
-				// ADJA ist eine ortsbezogene Angabe und bezieht sich immer auf ein darauffolgendes Nomen 
-				//somit ist i+1 niemals außerhalb des Baumes | Beispiel: Frankfurter Zoo, Bremer Warenhaus
+
 				if(children[i+1].nodeString().startsWith("NN")){
 					String erstesNE = children[i].firstChild().nodeString();
 					String zweitesNE = children[i+1].firstChild().nodeString();
@@ -250,9 +219,11 @@ public class SimpleGermanExample {
     	
     	
     }
-    
-    private void traverse(Tree tree){
-    	//System.out.println(tree.nodeString());
+    /**
+     * Traversiert durch den Baum
+     * @param tree Baum
+     */
+    private void traverse(Tree tree){;
     	
     	if (tree.nodeString().startsWith("NP")){
     		checkNP(tree);

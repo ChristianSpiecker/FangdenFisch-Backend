@@ -17,16 +17,16 @@ import blueline_own.Controller;
  * 
  * 0 Suchwort   ->   Volltext
  * 
- * 1 Suchklasse ->	Strukturiert  maybe volltext
+ * 1 Suchklasse ->	Strukturiert 
  * 
- * 2 Suchklasse + Suchwort -> Strukturiert maybe volltext
+ * 2 Suchklasse + Suchwort -> Strukturiert
  * 
  * 3 Suchklasse + Suchwort + Deskriptor -> Strukturiert
  * 
  */
 
-
 public class Result {
+	
 	ArrayList<String> searchword = new ArrayList<>();
 	ArrayList<String> searchclass = new ArrayList<>();
 	ArrayList<String> descriptor = new ArrayList<>();
@@ -34,11 +34,13 @@ public class Result {
 	ArrayList<String> filenames = new ArrayList<>();
 	String tree = null;
 	ArrayList<Date> date = new ArrayList<>();
-	private int datestate = -1; // 0 == vor : 1 == ab
 	
+	private int datestate = -1; // 0 == vor : 1 == ab
 	public int getDatestate() {
 		return datestate;
 	}
+	
+	//Singleton
 	private static Result instance;
 	public static Result getInstance (){
 		    if (Result.instance == null) {
@@ -57,7 +59,9 @@ public class Result {
 		}
 		return date.get(index);
 	}
-	
+	/**
+	 * Resetet Resultobjekt
+	 */
 	public void reset(){
 		searchword.clear();
 		searchclass.clear();
@@ -68,10 +72,13 @@ public class Result {
 		datestate = -1;
 	}
 	
-
+/** 
+ * Macht aus einem String ein Datum und fügt dieses hinzu
+ * @param d Datumsstring
+ */
 	public void addDate(String d){
 		// TODO abfangen wenn kein jahr gegeben
-
+		
 		SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy");
 		try {
 		    Date da = f.parse(d);
@@ -79,13 +86,17 @@ public class Result {
 		    System.out.println("Date geaddet: "+da);
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Date dt = new Date(Integer.parseInt(d.split("\\.")[2]),Integer.parseInt(d.split("\\.")[1]), Integer.parseInt(d.split("\\.")[0]));
-			date.add(dt);
+			//Date dt = new Date(Integer.parseInt(d.split("\\.")[2]),Integer.parseInt(d.split("\\.")[1]), Integer.parseInt(d.split("\\.")[0]));
+			//date.add(dt);
 		}
-		
 		
 	}
 	
+	/**
+	 * Fügt eine temporäre Preposition hinzu
+	 * @param temp_preposition temporäre Preposition
+	 * @return gibt den neuen DateState zurück
+	 */
 	public int addTemp_Preposition(String temp_preposition){
 		String [] before = {"bis","vor"};
 		String [] after = {"ab","seit"};
@@ -104,6 +115,10 @@ public class Result {
 		}
 		return -1;
 	}
+	/**
+	 * Errechnet den Fall aus den gegeben Informationen
+	 * @return Gibt die Fallnummer zurück 0-3
+	 */
 	public int evaluate(){
 		if(searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
 			// 0 Suchwort   ->   Volltext

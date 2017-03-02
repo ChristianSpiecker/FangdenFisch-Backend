@@ -28,7 +28,11 @@ public class SearchClassMapper {
 		put("Rechnungen",5);
 		
 	}};
-
+	/**
+	 * Sucht zu gegebenem Suchklassenname die Suchklassennummer heraus
+	 * @param word Suchklassenname
+	 * @return Suchklassennnummer oder -1 
+	 */
 	public static int getSearchClassNumber(String word){
 		if (searchClassMap.get(word) == null){
 			return -1;
