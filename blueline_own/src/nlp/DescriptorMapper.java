@@ -28,7 +28,7 @@ public class DescriptorMapper {
 			put("Auftragnummern",3);
 		}});
 		
-		put("Aufträge",new HashMap<String,Integer>(){{
+		put("Auftraege",new HashMap<String,Integer>(){{
 			put("Kundenname",0);
 			put("Kundennamen",0);
 			put("Kunde",0);
@@ -50,7 +50,7 @@ public class DescriptorMapper {
 			2: Angebotsdatum
 			3: Angebotsnummer
 		*/		
-		put("Auftragsbestätigung",new HashMap<String,Integer>(){{
+		put("Auftragsbestaetigung",new HashMap<String,Integer>(){{
 			put("Auftragsnummer Kunde",0);
 			put("Auftragsnummer Kunden",0);	
 			put("Auftragsnummern Kunde",0);
@@ -69,7 +69,7 @@ public class DescriptorMapper {
 			put("Angebotsnummern",3);
 			put("Angebotnummern",3);
 		}});
-		put("Auftragsbestätigungen",new HashMap<String,Integer>(){{
+		put("Auftragsbestaetigungen",new HashMap<String,Integer>(){{
 			put("Auftragsnummer Kunde",0);
 			put("Auftragsnummer Kunden",0);	
 			put("Auftragsnummern Kunde",0);
@@ -196,7 +196,7 @@ public class DescriptorMapper {
 			put("Hundenamen",0);
 			put("Artikelnamen",1);
 			put("Artikelname",1);
-			put("Anfragedatum",2);
+			put("Anfragedatum1",2);
 		}});
 		put("Anfragen",new HashMap<String,Integer>(){{
 			put("Kundenname",0);
@@ -207,7 +207,7 @@ public class DescriptorMapper {
 			put("Hundenamen",0);
 			put("Artikelnamen",1);
 			put("Artikelname",1);
-			put("Anfragedatum",2);			
+			put("Anfragedatum1",2);			
 		}});
 		/*	0: Angebotnummer
 			1: Angebotsdatum
@@ -337,7 +337,7 @@ public class DescriptorMapper {
 			put("510", "Kundenname");
 			put("60", "Kundenname");
 			put("61", "Artikelname");
-			put("62", "Anfragedatum");
+			put("62", "Anfragedatum1");
 
 	}};
 	public static int getDescriptorNumber(String searchClass, String word){

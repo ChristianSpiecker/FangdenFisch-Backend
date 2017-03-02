@@ -18,68 +18,74 @@ public class TCPServer {
 		String clientSentence;
 
 		ServerSocket welcomeSocket = new ServerSocket(420);
+		//Properties und CoreNLP laden
 		SimpleGermanExample sigeex = SimpleGermanExample.getInstance();
+		//Beim Server anmelden und Session erstellen
 		Controller.getInstance();
-		System.out.println("Server rennt");
+		System.out.println("Server bereit");
 		while (true) {
-
+			// Client baut Verbindung auf
 			Socket connectionSocket = welcomeSocket.accept();
-
+			
+			// BufferedReader zum senden der Dokumente
 			BufferedReader inFromClient = new BufferedReader(
 					new InputStreamReader(connectionSocket.getInputStream()));
-			
+			// PrintWriter zur Kommunikation
 			PrintWriter outPrint = new PrintWriter(connectionSocket.getOutputStream(),true);
 
 			BufferedOutputStream outToClient = new BufferedOutputStream(
 					connectionSocket.getOutputStream());
 			
-			//WARUMMMMMMMMM
+			// Woerter der Anfrage sind mit '+' verknuepft
 			clientSentence = inFromClient.readLine().replace('+', ' ');
 			
+			// Wenn der Client eine Nachricht gesendet hat
 			if(clientSentence != null){
 				System.out.println(clientSentence);
 				
-				
+				// Clientnachricht wird vom CoreNLP inteptretiert und die Baumstruktur wird im Result-Objekt gehalten.
 				sigeex.myanalyseText(clientSentence);
 				
-				
+				// Verarbeitung der Anfrage und speichern der Dokumente im Result-Objekt
 				bluelinestuff();
+				
 				Result res = Result.getInstance();
-				String answer = "";
+				
+				outPrint.println(res.fileCount());
 				
 				//File gefunden
-				if(res.fileCount() > 0){
-					
-					for(int i=0; i<res.fileCount();i++){
-
+				for (int i = 0; i < res.fileCount(); i++) {
+					String a = "";
+					//Thread.sleep(500);
+					a = inFromClient.readLine();
+					System.out.println(a);
+					if(a.equals("done")){
+						
 						// Sende den Dateinamen vorraus
 						outPrint.println(res.getFilename(i));
-						
+
 						// Erzeuge DataInputStream aus dem InputStream
 						DataInputStream dis = new DataInputStream(res.getFile(i));
 						// Erzeuge byte[] aus dem DataInputStream
 						byte[] buffer = getBytes(dis);
-						
+
 						// Die Bytegroeße der Datei vorraus senden
 						outPrint.println(buffer.length);
-						
+						outPrint.flush();
+
 						// Sende die Bytes der Datei
 						outToClient.write(buffer);
-						
-						// FLUUUSSSSSHHH
-						outPrint.flush();
 						outToClient.flush();
 						
 						
 						System.out.println("######## Gesendet");
 						System.out.println("Dateiname: " + res.getFilename(i));
 						System.out.println("Dateigroesse: " + buffer.length);
-					}
 
-				}else{
-					//kein File gefunden
-					//outToClient.writeBytes("NoFile\n");
-					System.out.println("Gesendet: Es wurde leider kein Fisch gefangen\n");
+						// Datei zuende info
+						// outPrint.println("Ende");
+					}
+					
 				}
 				
 			}
@@ -113,10 +119,14 @@ public class TCPServer {
 	public static void bluelinestuff() throws NumberFormatException, BlueLineException, IOException{
 		Result res = Result.getInstance();
 		
-		
+		if(!Controller.getInstance().getSession().isValid()){
+			System.out.println("Session ist veraltet. Wird versucht zu erneuern.");
+			Controller.getInstance().updateSession();
+		}
 		switch(res.evaluate()){
 		case(0):{
 		// TODO Volltext
+			
 			System.out.println(res.getSearchword(0));
 			
 			Controller.getInstance().fulltextSearch(res.getSearchword(0));
@@ -125,31 +135,43 @@ public class TCPServer {
 		}
 		case(1):{
 		// TODO Strukturiert Suchklasse	
+			if(SearchClassMapper.getSearchClassNumber(res.getsearchclass(0)) != -1){
+				Controller.getInstance().searchClassSearch(res.getsearchclass(0));
+			}
 			break;
 		}
 		case(2):{
 			// TODO Strukturiert Suchklasse + Suchwort
+			if(SearchClassMapper.getSearchClassNumber(res.getsearchclass(0)) != -1){
+				int searchClass_Number = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
+				// auf -1 überprüfen
+				Controller.getInstance().searchclassSearchwordSearch(res.getsearchclass(0), searchClass_Number, res.getSearchword(0));
+			}
 			
 			break;
 		}
 		case(3):{
-			int searchClass = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
-			int descriptor_Number = DescriptorMapper.getDescriptorNumber(res.getsearchclass(0), res.getdescriptor(0));
-			String descriptor = DescriptorMapper.getDescriptorName(descriptor_Number, searchClass);
-			String searchword = res.getSearchword(0);
-			String searchClassString = res.getsearchclass(0);
-						Date firstDate = null;
-			if(res.getDate(0) != null) firstDate = res.getDate(0);
-			Date secondDate = null;
-			if(res.getDate(1) != null) firstDate = res.getDate(1);
 			
+			if(SearchClassMapper.getSearchClassNumber(res.getsearchclass(0)) != -1 && DescriptorMapper.getDescriptorNumber(res.getsearchclass(0), res.getdescriptor(0)) != -1){
+				int searchClass_Number = SearchClassMapper.getSearchClassNumber(res.getsearchclass(0));
+				int descriptor_Number = DescriptorMapper.getDescriptorNumber(res.getsearchclass(0), res.getdescriptor(0));
+				String descriptor = DescriptorMapper.getDescriptorName(descriptor_Number, searchClass_Number);
+				String searchword = res.getSearchword(0);
+				String searchClassString = res.getsearchclass(0);
+							Date firstDate = null;
+				if(res.getDate(0) != null) firstDate = res.getDate(0);
+				Date secondDate = null;
+				if(res.getDate(1) != null) firstDate = res.getDate(1);
+				
 
-			if(searchClass < 0 || descriptor_Number < 0){
-				//TODO ungültige anfrage
-				System.out.println("Ungültige Anfrage brooo");
-			}else{
-				Controller.getInstance().descriptorsearch(searchClass,searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, res.getDatestate());
+				if(searchClass_Number < 0 || descriptor_Number < 0){
+					//TODO ungültige anfrage
+					System.out.println("Ungültige Anfrage brooo");
+				}else{
+					Controller.getInstance().descriptorsearch(searchClass_Number, searchClassString, searchword, descriptor,descriptor_Number, firstDate, secondDate, res.getDatestate());
+				}
 			}
+			
 			break;
 		}
 		default:{

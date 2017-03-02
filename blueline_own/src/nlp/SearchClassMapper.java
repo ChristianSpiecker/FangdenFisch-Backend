@@ -7,10 +7,10 @@ public class SearchClassMapper {
 	private static Map<String, Integer> searchClassMap = new HashMap<String, Integer>(){{
 
 		put("Auftrag",0);
-		put("Aufträge",0);
+		put("Auftraege",0);
 		
-		put("Auftragsbestätigung",1);
-		put("Auftragsbestätigungen",1);
+		put("Auftragsbestaetigung",1);
+		put("Auftragsbestaetigungen",1);
 		
 		put("Prospekt",2);
 		put("Prospekte",2);

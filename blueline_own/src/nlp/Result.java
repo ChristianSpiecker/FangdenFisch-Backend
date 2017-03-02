@@ -110,9 +110,11 @@ public class Result {
 			System.out.println("nullter fall");
 			return 0;
 		}else if(!searchclass.isEmpty() && descriptor.isEmpty() && searchword.isEmpty()){
+			System.out.println("erster fall");
 			// 1 Suchklasse ->	Strukturiert
 			return 1;
 		}else if(!searchclass.isEmpty() && descriptor.isEmpty() && !searchword.isEmpty()){
+			System.out.println("zweiter fall");
 			// 2 Suchklasse + Suchwort -> Strukturiert
 			return 2;
 		}else if(!searchclass.isEmpty() && !descriptor.isEmpty() && !searchword.isEmpty()){

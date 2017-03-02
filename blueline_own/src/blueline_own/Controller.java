@@ -53,6 +53,19 @@ public class Controller {
 		
 
 	}
+	
+	public ISession getSession(){
+		return session;
+	}
+	
+	public void updateSession() throws IOException, BlueLineException{
+		this.meine_anmeldung = new Anmeldung();
+		meine_anmeldung.initFramework();	
+		meine_anmeldung.initDocumentServer("blueline_own.ini");
+		this.session = meine_anmeldung.login("Supervisor", "Supervisor", "km4");
+	}
+	
+	
 	public void logout() throws BlueLineException{
 		// Benutzer abmelden + Verbindung von Dokumentenserver trennen
 		meine_anmeldung.logout(session);
@@ -78,7 +91,7 @@ public class Controller {
 			// was soll gelesen werden?
 			InputStream inputStream = documentPart.getRawDataAsStream();
 				
-			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+			//saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
 		}
 	}
 	public List<IDocument> fulltextSearch(String searchword) throws BlueLineException, NumberFormatException, IOException{
@@ -110,6 +123,66 @@ public class Controller {
 		return documents;
 	}
 	
+	
+	public List<IDocument> searchclassSearchwordSearch(String searchclass, int searchClass_Number, String searchword) throws BlueLineException, NumberFormatException, IOException{
+		
+		
+		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
+		List<IDocument> documents = suche.searchclassSearchwordSearch(searchclass, searchClass_Number, searchword);
+		for(IDocument document : documents){
+			System.out.println("DOKUMENT ERHALTEN");
+			// alle Repraesentationen dieses Dokuments abrufen
+			IRepresentation[] representationList = document.getRepresentationList();
+			int representationNr = document.getDefaultRepresentation();
+					
+			// aus der Repraesentationsliste auslesen
+			IRepresentation defaultRepresentation = representationList[representationNr];
+					
+			// erstes Teildokument der Repraesentation herunterladen
+			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+					
+			// was soll gelesen werden?
+			InputStream inputStream = documentPart.getRawDataAsStream();
+			String filename = documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1];
+			filename = normalizeFilename(filename);
+			
+			// File im Resultobjekt adden
+			
+			Result.getInstance().addFile(inputStream, filename);
+		}
+		return documents;
+	}
+public List<IDocument> searchClassSearch(String searchClass) throws BlueLineException, NumberFormatException, IOException{
+		
+		
+		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
+		List<IDocument> documents = suche.searchClassSearch(searchClass);
+		for(IDocument document : documents){
+			System.out.println("DOKUMENT ERHALTEN");
+			// alle Repraesentationen dieses Dokuments abrufen
+			IRepresentation[] representationList = document.getRepresentationList();
+			int representationNr = document.getDefaultRepresentation();
+					
+			// aus der Repraesentationsliste auslesen
+			IRepresentation defaultRepresentation = representationList[representationNr];
+					
+			// erstes Teildokument der Repraesentation herunterladen
+			IDocumentPart documentPart = defaultRepresentation.getPartDocument(0);
+			// was soll gelesen werden?
+			InputStream inputStream = documentPart.getRawDataAsStream();
+			
+			String filename = documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1];
+			filename = normalizeFilename(filename);
+			
+			// File im Resultobjekt adden
+			
+			Result.getInstance().addFile(inputStream, filename);
+		}
+		return documents;
+	}
+	
+	
+	
 	public void mysearch(String searchclass, String searchword) throws NumberFormatException, BlueLineException, IOException{
 		//Search Document
 		Suche suche = new Suche(session, meine_anmeldung.get_server(), meine_anmeldung.get_factory());
@@ -132,7 +205,7 @@ public class Controller {
 			InputStream inputStream = documentPart.getRawDataAsStream();
 			System.out.println("gesplittet");
 				
-			saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
+			//saveDocuments(inputStream, documentPart.getFilename().split("\\\\")[documentPart.getFilename().split("\\\\").length-1]);
 		}
 	}
 	
@@ -167,7 +240,7 @@ public class Controller {
 			
 			
 			
-			saveDocuments(inputStream, filename);
+			//saveDocuments(inputStream, filename);
 		}
 	}
 
