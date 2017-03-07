@@ -136,7 +136,10 @@ public class SimpleGermanExample {
 				// NP PP NE
 				String erstesNE = children[i].getChild(0).toString().split(" ")[1];
 				String zweitesNE = children[i].getChild(1).toString().split(" ")[1];
-				String searchword = erstesNE.substring(0,erstesNE.length()-1).concat(" ").concat(zweitesNE.substring(0,zweitesNE.length()-1));
+				if ( erstesNE.substring(0,erstesNE.length()-1).equals("Rheinberg")){
+					erstesNE="Rheinwerk ";
+				}
+				String searchword = erstesNE.substring(0,erstesNE.length()-1).concat(" ").concat(zweitesNE.substring(0,zweitesNE.length()-1));		
 				System.out.println("Suchwort geaddet: " + searchword);
 				Result.getInstance().setSearchword(searchword);
 
